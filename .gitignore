@@ -1,0 +1,7 @@
+data-raw/devstuffs.R
+data-raw/
+*.Rproj
+.Rproj.user
+.Rhistory
+DESCRIPTION
+LICENSE.md
