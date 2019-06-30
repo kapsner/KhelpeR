@@ -16,7 +16,7 @@ initializeTable1 <- function(grouped = FALSE){
 }
 
 
-#' @title Fill Table 1 with Data
+#' @title Genereate Overview Table of Numeric Variables
 #'
 #' @importFrom data.table .SD
 

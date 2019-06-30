@@ -2,10 +2,10 @@
 % Please edit documentation in R/table1.R
 \name{fillTable1}
 \alias{fillTable1}
-\title{Fill Table 1 with Data}
+\title{Genereate Overview Table of Numeric Variables}
 \usage{
 fillTable1(dataset, group_var = NULL)
 }
 \description{
-Fill Table 1 with Data
+Genereate Overview Table of Numeric Variables
 }

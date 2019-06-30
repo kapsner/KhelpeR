@@ -9,7 +9,8 @@ extensiveNumStats <- function(vector, rows=F){
     Q <- stats::quantile(vector, probs=c(.25, .75), na.rm=T, names=F)
     I_out <- stats::IQR(vector, na.rm=T)*1.5
 
-    retdt <- list(is_na = as.numeric(base::sum(is.na(vector))),
+    retdt <- list(n = as.numeric(base::sum(!is.na(vector))),
+                  is_na = as.numeric(base::sum(is.na(vector))),
                   unique = as.numeric(base::nlevels(fac_vec)),
                   min = as.numeric(base::min(vector, na.rm = T)),
                   q25 = as.numeric(Q[1]),
@@ -35,7 +36,8 @@ extensiveNumStats <- function(vector, rows=F){
   } else {
     # return empty table for initialization
     retdt <- data.table::data.table(
-      cbind(is_na = numeric(),
+      cbind(n = numeric(),
+            is_na = numeric(),
             unique = numeric(),
             min = numeric(),
             q25 = numeric(),
@@ -53,7 +55,7 @@ extensiveNumStats <- function(vector, rows=F){
             mad_med = numeric(),
             skeweness = numeric(),
             kurtosis = numeric(),
-            var = numeric(),
+            variance = numeric(),
             range = numeric(),
             iqr = numeric(),
             se = numeric()
@@ -61,4 +63,38 @@ extensiveNumStats <- function(vector, rows=F){
     )
   }
   return(retdt)
+}
+
+
+numStatsTable <- function(dataset, group_var = NULL){
+  # test, if dataset ist data.table
+  if (!data.table::is.data.table(dataset)){
+    return("data provided must be a data.table object")
+  } else {
+    # subset numeric values
+    vec <- colnames(dataset)[dataset[,sapply(.SD, is.numeric), .SDcol=colnames(dataset)]]
+
+    if (length(vec) <= 0){
+      return("your dataset does not contain numeric variables")
+    }
+
+    # init table
+    table <- extensiveNumStats(NULL)
+
+    if (is.null(group_var)){
+      table <- cbind(Name = character(), table)
+      for (variable in vec){
+        table <- rbind(table, cbind(Name = variable, dataset[,extensiveNumStats(get(variable))]))
+      }
+    } else {
+      table <- cbind(Name = character(), Group = character(), table)
+      for (variable in vec){
+        table <- rbind(table, cbind(Name = variable, Group = "", dataset[,extensiveNumStats(get(variable))]))
+        for (group in dataset[,unique(get(group_var))]){
+          table <- rbind(table, cbind(Name = "", Group = group, dataset[get(group_var)==group,extensiveNumStats(get(variable))]))
+        }
+      }
+    }
+    return(table)
+  }
 }
