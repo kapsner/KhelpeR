@@ -8,7 +8,7 @@ test_that("test extensiveNumStats", {
   dataset[,("gear"):=factor(get("gear"))]
 
   expect_silent(s1 <- dataset[,extensiveNumStats(get("wt"))])
-  expect_known_hash(s1, "cb99c670f3")
+  expect_known_hash(s1, "2d98143852")
 })
 
 
@@ -17,8 +17,8 @@ test_that("test numStatsTable", {
   dataset[,("gear"):=factor(get("gear"))]
 
   expect_silent(nt1 <- numStatsTable(dataset))
-  expect_known_hash(nt1, "fb982e0959")
+  expect_known_hash(nt1, "0edfd70a80")
 
   expect_silent(nt2 <- numStatsTable(dataset, group_var = "gear"))
-  expect_known_hash(nt2, "aedbf8145b")
+  expect_known_hash(nt2, "fbd27dd015")
 })

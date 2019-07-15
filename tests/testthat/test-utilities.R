@@ -5,8 +5,8 @@ prefix <- "./"
 
 test_that("test pMarker", {
   expect_equal(pMarker(0.1), "")
-  expect_equal(pMarker(0.07), ".")
-  expect_equal(pMarker(0.05), ".")
+  expect_equal(pMarker(0.07), "°")
+  expect_equal(pMarker(0.05), "°")
   expect_equal(pMarker(0.02), "*")
   expect_equal(pMarker(0.01), "*")
   expect_equal(pMarker(0.0099), "**")

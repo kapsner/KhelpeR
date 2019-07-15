@@ -1,0 +1,82 @@
+---
+title: "Use_KhelpeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+library(data.table)
+```
+
+# Introduction 
+
+KhelpeR is an R package that aims to provide useful functions for several tasks, e.g. exploratory data analysis or machine learning. 
+
+# Exploratory Data Analysis 
+
+```{r}
+# import data
+dataset <- data.table::data.table(datasets::mtcars)
+dataset[,("gear"):=factor(get("gear"))]
+```
+
+## Numeric Statistics 
+
+### Simple Numeric Statistics 
+
+```{r}
+KhelpeR::fastNumStats(dataset)
+```
+
+### Extensive Numeric Statistics 
+
+With the default parameter 'method = "all"', you get a table with extensive numerical statistics. 
+
+```{r}
+KhelpeR::numStatsTable(dataset)
+```
+
+Setting the parameter 'method' to "base", results in a table with basic numerical statistics. 
+
+```{r}
+KhelpeR::numStatsTable(dataset, method = "base")
+```
+
+Setting the parameter 'method' to "others", results in a table with the complexer other part of the numeric statistics. 
+
+```{r}
+KhelpeR::numStatsTable(dataset, method = "others")
+```
+
+### Grouping 
+
+It is also possible to introduce a grouping variable to the function to show the statistisics for each variable and group separately.
+
+```{r}
+KhelpeR::numStatsTable(dataset, group_var = "gear", method = "base")
+```
+
+## Table 1 
+
+Every paper has a 'Table 1' to show descriptive statistics about the data set. The function 'fillTable1()' easily creates this table. 
+
+```{r}
+KhelpeR::fillTable1Num(dataset)
+```
+
+Even grouped by a grouping variable and more digits. 
+
+```{r}
+KhelpeR::fillTable1Num(dataset, group_var = "gear", digits = 3)
+```

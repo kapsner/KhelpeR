@@ -1,4 +1,11 @@
-fastNumStats <- function(dataset){
+#' @title Calculate Overview Statistics For Numerical Variables
+#'
+#' @param dataset The dataset to analyze. It must be of the class 'data.table'.
+#' @param digits An integer. Number of digits to round numeric variables (default: 2).
+#'
+#' @export
+
+fastNumStats <- function(dataset, digits = 2){
 
   # test, if dataset ist data.table
   if (!data.table::is.data.table(dataset)){
@@ -17,19 +24,19 @@ fastNumStats <- function(dataset){
 
     retdt <- data.table::data.table(rbind(
       # MAD: mean absolute deviation
-      dat[,lapply(.SD, stats::mad, na.rm=T)],
+      round(dat[,lapply(.SD, stats::mad, na.rm=T)], digits),
       # IQR: Interquartile Range
-      dat[,lapply(.SD, stats::IQR, na.rm=T)],
+      round(dat[,lapply(.SD, stats::IQR, na.rm=T)], digits),
       # Skeweness
-      dat[,lapply(.SD, e1071::skewness, na.rm=T)],
+      round(dat[,lapply(.SD, e1071::skewness, na.rm=T)], digits),
       # Kurtosis
-      dat[,lapply(.SD, e1071::kurtosis, na.rm=T)],
+      round(dat[,lapply(.SD, e1071::kurtosis, na.rm=T)], digits),
       # Max-Min (Range)
-      dat[,lapply(.SD, base::max, na.rm=T)] - dat[,lapply(.SD, base::min, na.rm=T)]
+      round(dat[,lapply(.SD, base::max, na.rm=T)] - dat[,lapply(.SD, base::min, na.rm=T)], digits)
     ))
 
     retdt <- data.table::data.table(t(retdt), keep.rownames = T)
-    colnames(retdt) <- c("Variable", "MAD", "IQR", "Skeweness", "Kurtosis", "Max-Min")
+    colnames(retdt) <- c("Name", "MAD", "IQR", "Skeweness", "Kurtosis", "Max-Min")
 
     return(retdt)
   }

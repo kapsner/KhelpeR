@@ -23,7 +23,7 @@ pMarker <- function(value){
     } else if (value < 0.05){
       out <- "*"
     } else if (value < 0.1){
-      out <- "."
+      out <- "°"
     } else {
       out <- ""
     }

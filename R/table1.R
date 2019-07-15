@@ -16,11 +16,18 @@ initializeTable1 <- function(grouped = FALSE){
 }
 
 
-#' @title Genereate Overview Table of Numeric Variables
+#' @title Genereate Overview Table for Numeric Variables
 #'
-#' @importFrom data.table .SD
+#' @param dataset The dataset to analyze. It must be of the class 'data.table'.
+#' @param group_var A character. Name of the grouping variable. The grouping variable
+#'   should be of the type 'factor'.
+#' @param digits An integer. Number of digits to round numeric variables (default: 2).
+#'
+#' @importFrom data.table .SD .N
+#'
+#' @export
 
-fillTable1 <- function(dataset, group_var = NULL){
+fillTable1Num <- function(dataset, group_var = NULL, digits = 2){
   # test, if dataset ist data.table
   if (!data.table::is.data.table(dataset)){
     return("data provided must be a data.table object")
@@ -41,15 +48,15 @@ fillTable1 <- function(dataset, group_var = NULL){
 
     # iterate over numeric variables
     for (variable in vec){
-      shap <- shaprioUtil(dataset, variable, digits = 2)
+      shap <- shaprioUtil(dataset, variable, digits = digits)
       new_data <- data.table::data.table(
         Name = variable,
         N = as.numeric(dataset[!is.na(get(variable)),.N]),
-        "Distribution (min/mean/med/max/sd)" = distribution(dataset, variable),
+        "Distribution (min/mean/med/max/sd)" = distribution(dataset, variable, digits),
         Normality = paste0("p=", shap[3,"value",with=F], pMarker(shap[3,"value",with=F]), paste0(" (W=", shap[2,"value",with=F], ")"))
       )
       if (!is.null(group_var)){
-        levene <- leveneUtil(dataset, variable, group_var, digits = 2)
+        levene <- leveneUtil(dataset, variable, group_var, digits = digits)
         new_data[["Group"]] <- ""
         new_data[["Homoscedasticity"]] <- paste0("p=", levene[3,"value",with=F], pMarker(levene[3,"value",with=F]), paste0(" (F=", levene[2,"value",with=F], ")"))
       }
@@ -60,12 +67,12 @@ fillTable1 <- function(dataset, group_var = NULL){
       if (!is.null(group_var)){
         for (gr in dataset[,unique(get(group_var))]){
           subset <- dataset[get(group_var)==gr,]
-          shap_sub <- shaprioUtil(subset, variable, digits = 2)
+          shap_sub <- shaprioUtil(subset, variable, digits = digits)
           table1 <- rbind(table1,
                           data.table::data.table(Name = "",
                                                  Group = paste0("Group: ", gr),
                                                  N = subset[!is.na(get(variable)),.N],
-                                                 "Distribution (min/mean/med/max/sd)" = distribution(subset, variable),
+                                                 "Distribution (min/mean/med/max/sd)" = distribution(subset, variable, digits),
                                                  Normality = paste0("p=", shap_sub[3,"value",with=F], pMarker(shap_sub[3,"value",with=F]), paste0(" (W=", shap_sub[2,"value",with=F], ")")),
                                                  Homoscedasticity = "")
           )

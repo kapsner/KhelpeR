@@ -1,16 +1,16 @@
 # calculate standard error
 # standard error (https://rcompanion.org/rcompanion/c_03.html)
 se <- function(vector){
-  return(sd(vector, na.rm = T) / sqrt(length(vector[!is.na(vector)])))
+  return(stats::sd(vector, na.rm = T) / sqrt(length(vector[!is.na(vector)])))
 }
 
-distribution <- function(dataset, variable){
-  vec <- round(dataset[!is.na(get(variable)),get(variable)], 2)
-  ret <- paste(base::min(vec),
-               round(base::mean(vec), 2),
-               stats::median(vec),
-               base::max(vec),
-               paste0("±", round(stats::sd(vec), 2)),
+distribution <- function(dataset, variable, digits = 2){
+  vec <- round(dataset[!is.na(get(variable)),get(variable)], digits)
+  ret <- paste(round(base::min(vec), digits),
+               round(base::mean(vec), digits),
+               round(stats::median(vec), digits),
+               round(base::max(vec), digits),
+               paste0("±", round(stats::sd(vec), digits)),
                sep = "/ ")
   return(ret)
 }

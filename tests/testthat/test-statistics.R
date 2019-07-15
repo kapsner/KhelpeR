@@ -16,5 +16,5 @@ test_that("test leveneUtil", {
   dataset[,("gear"):=factor(get("gear"))]
 
   expect_silent(l1 <- leveneUtil(dataset, variable = "disp", group = "gear"))
-  expect_known_hash(l1, "5cef2ff056")
+  expect_known_hash(l1, "45722459f5")
 })
