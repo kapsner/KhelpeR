@@ -28,7 +28,8 @@ KhelpeR is an R package that aims to provide useful functions for several tasks,
 ```{r}
 # import data
 dataset <- data.table::data.table(datasets::mtcars)
-dataset[,("gear"):=factor(get("gear"))]
+vec <- c("cyl", "gear", "vs", "am", "carb")
+dataset[,(vec):=lapply(.SD, factor), .SDcols=vec]
 ```
 
 ## Numeric Statistics 
@@ -41,7 +42,7 @@ KhelpeR::fastNumStats(dataset)
 
 ### Extensive Numeric Statistics 
 
-With the default parameter 'method = "all"', you get a table with extensive numerical statistics. 
+With the default parameter 'method = "all"' (=default), you get a table with extensive numerical statistics. 
 
 ```{r}
 KhelpeR::numStatsTable(dataset)
@@ -67,16 +68,35 @@ It is also possible to introduce a grouping variable to the function to show the
 KhelpeR::numStatsTable(dataset, group_var = "gear", method = "base")
 ```
 
+#### Extensive Numeric Statistics per Category
+
+```{r}
+KhelpeR::numStatsTablePerCat(dataset, "mpg", "gear")
+```
+
 ## Table 1 
 
-Every paper has a 'Table 1' to show descriptive statistics about the data set. The function 'fillTable1()' easily creates this table. 
+### Descriptive Numerical Data 
+
+Every paper has a 'Table 1' to show descriptive statistics about the data set. The function 'fillTable1Num()' easily creates this table for numerical data. 
 
 ```{r}
 KhelpeR::fillTable1Num(dataset)
 ```
 
-Even grouped by a grouping variable and more digits. 
+You can also create 'Table 1' grouped by a grouping variable. This adds the calculation of the homoscedasticity between the respective groups for each variable. It is also possible to specify the number of digits in the output table. 
 
 ```{r}
 KhelpeR::fillTable1Num(dataset, group_var = "gear", digits = 3)
 ```
+
+## Descriptive Categorical Data 
+
+```{r}
+KhelpeR::fastCatStats(dataset)
+```
+
+```{r}
+KhelpeR::fastCatStats(dataset, show_levels = TRUE)
+```
+

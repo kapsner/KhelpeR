@@ -17,13 +17,13 @@ pMarker <- function(value){
   ret <- tryCatch({
     suppressWarnings(value <- as.numeric(as.character(value)))
     if (value < 0.001){
-      out <- "***"
+      out <- paste0(rep("\u002A", 3), collapse = "")
     } else if (value < 0.01){
-      out <- "**"
+      out <- paste0(rep("\u002A", 2), collapse = "")
     } else if (value < 0.05){
-      out <- "*"
+      out <- "\u002A"
     } else if (value < 0.1){
-      out <- "°"
+      out <- "\u00B0"
     } else {
       out <- ""
     }

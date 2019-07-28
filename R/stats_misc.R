@@ -10,7 +10,14 @@ distribution <- function(dataset, variable, digits = 2){
                round(base::mean(vec), digits),
                round(stats::median(vec), digits),
                round(base::max(vec), digits),
-               paste0("±", round(stats::sd(vec), digits)),
+               paste0("\u00B1", round(stats::sd(vec), digits)),
                sep = "/ ")
   return(ret)
+}
+
+# mode
+modeFn <- function(vector) {
+  # https://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode
+  ux <- unique(vector)
+  return(ux[which.max(tabulate(match(vector, ux)))])
 }

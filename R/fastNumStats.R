@@ -7,37 +7,35 @@
 
 fastNumStats <- function(dataset, digits = 2){
 
-  # test, if dataset ist data.table
-  if (!data.table::is.data.table(dataset)){
-    return("data provided must be a data.table object")
+  stopifnot(
+    data.table::is.data.table(dataset)
+  )
 
-  } else {
-    # subset numeric values
-    vec <- colnames(dataset)[dataset[,sapply(.SD, is.numeric), .SDcol=colnames(dataset)]]
+  # subset numeric values
+  vec <- colnames(dataset)[dataset[,sapply(.SD, is.numeric), .SDcol=colnames(dataset)]]
 
-    if (length(vec) <= 0){
-      return("your dataset does not contain numeric variables")
-    }
+  stopifnot(
+    length(vec) > 0
+  )
 
-    # store dataset temporarily
-    dat <- dataset[,vec,with=F]
+  # store dataset temporarily
+  dat <- dataset[,vec,with=F]
 
-    retdt <- data.table::data.table(rbind(
-      # MAD: mean absolute deviation
-      round(dat[,lapply(.SD, stats::mad, na.rm=T)], digits),
-      # IQR: Interquartile Range
-      round(dat[,lapply(.SD, stats::IQR, na.rm=T)], digits),
-      # Skeweness
-      round(dat[,lapply(.SD, e1071::skewness, na.rm=T)], digits),
-      # Kurtosis
-      round(dat[,lapply(.SD, e1071::kurtosis, na.rm=T)], digits),
-      # Max-Min (Range)
-      round(dat[,lapply(.SD, base::max, na.rm=T)] - dat[,lapply(.SD, base::min, na.rm=T)], digits)
-    ))
+  retdt <- data.table::data.table(rbind(
+    # MAD: mean absolute deviation
+    round(dat[,lapply(.SD, stats::mad, na.rm=T)], digits),
+    # IQR: Interquartile Range
+    round(dat[,lapply(.SD, stats::IQR, na.rm=T)], digits),
+    # Skeweness
+    round(dat[,lapply(.SD, e1071::skewness, na.rm=T)], digits),
+    # Kurtosis
+    round(dat[,lapply(.SD, e1071::kurtosis, na.rm=T)], digits),
+    # Max-Min (Range)
+    round(dat[,lapply(.SD, base::max, na.rm=T)] - dat[,lapply(.SD, base::min, na.rm=T)], digits)
+  ))
 
-    retdt <- data.table::data.table(t(retdt), keep.rownames = T)
-    colnames(retdt) <- c("Name", "MAD", "IQR", "Skeweness", "Kurtosis", "Max-Min")
+  retdt <- data.table::data.table(t(retdt), keep.rownames = T)
+  colnames(retdt) <- c("Name", "MAD", "IQR", "Skeweness", "Kurtosis", "Max-Min")
 
-    return(retdt)
-  }
+  return(retdt)
 }
