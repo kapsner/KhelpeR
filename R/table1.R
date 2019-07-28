@@ -23,8 +23,6 @@ initializeTable1Num <- function(grouped = FALSE){
 #'   should be of the type 'factor'.
 #' @param digits An integer. Number of digits to round numeric variables (default: 2).
 #'
-#' @importFrom data.table .SD .N
-#'
 #' @export
 
 fillTable1Num <- function(dataset, group_var = NULL, digits = 2){

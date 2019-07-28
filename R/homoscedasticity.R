@@ -1,5 +1,5 @@
 # levene utility
-leveneUtil <- function(dataset, variable, group, digits = 6){
+leveneUtil <- function(dataset, variable, group, digits = 3){
   outdat <- tryCatch({
     levene <- car::leveneTest(y = dataset[,get(variable)], group = dataset[,get(group)], center = stats::median)
     outdat <- data.table::data.table(

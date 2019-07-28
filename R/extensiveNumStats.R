@@ -136,7 +136,7 @@ numStatsTable <- function(dataset, group_var = NULL, method = "all"){
 #' @param group_var A character. Name of the grouping variable. The grouping variable
 #'   should be of the type 'factor'.
 #'
-#' @importFrom data.table ":="
+#' @importFrom data.table ":=" ".N" ".SD" ".SDcols"
 #'
 #' @export
 #'

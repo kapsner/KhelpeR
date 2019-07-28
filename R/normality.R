@@ -1,5 +1,5 @@
 # shapiro utility
-shaprioUtil <- function(dataset, variable, digits=6){
+shaprioUtil <- function(dataset, variable, digits=3){
   outdat <- tryCatch({
     shap <- stats::shapiro.test(dataset[,get(variable)])
     outdat <- data.table::data.table(
