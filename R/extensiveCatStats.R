@@ -1,20 +1,30 @@
+#' @title extensiveCatStats
+#'
+#' @param dataset A data.table object.
+#' @param response_var A character string. The name of the column of interest
+#' @param digits A integer.
+#'
+#' @export
+#'
+
 extensiveCatStats <- function(dataset, response_var, digits = 4){
 
   stopifnot(
     data.table::is.data.table(dataset),
     is.character(response_var),
     is.factor(dataset[,get(response_var)]),
-    dataset[,nlevels(get(response_var))] >= 2
+    dataset[,nlevels(get(response_var))] >= 2,
+    response_var %in% colnames(dataset)
   )
 
   # subset numeric values
-  vec <- colnames(dataset)[dataset[,sapply(.SD, is.factor), .SDcol=colnames(dataset)]]
+  vec <- colnames(dataset)[dataset[,sapply(.SD, is.factor), .SDcols=colnames(dataset)]]
 
   # remove response_var
   vec <- setdiff(vec, response_var)
 
   # get levels with more than 2 categories
-  vec <- vec[dataset[,sapply(.SD, nlevels), .SDcol=vec] >= 2]
+  vec <- vec[dataset[,sapply(.SD, nlevels), .SDcols=vec] >= 2]
 
   stopifnot(
     length(vec) > 0
