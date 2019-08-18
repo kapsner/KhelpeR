@@ -1,0 +1,28 @@
+Package: KhelpeR
+Title: Helper Functions and Misc
+Version: 0.0.0.9000
+Authors@R: person('Lorenz', 'Kapsner', email =
+ 'lorenz.kapsner@web.de', role = c('cre', 'aut'))
+Description: My Personal Helper Functions.
+License: GPL-3
+LazyData: true
+URL: https://github.com/kapsner/KhelpeR
+BugReports: https://github.com/kapsner/KhelpeR/issues
+Encoding: UTF-8
+Date/Publication: 2019-08-17 18:18:22 UTC
+Imports: 
+    data.table,
+    e1071,
+    car,
+    dunn.test,
+    stats,
+    ggplot2,
+    magrittr,
+    sjstats,
+    knitr,
+    kableExtra
+Suggests: 
+    testthat,
+    datasets,
+    qpdf
+RoxygenNote: 6.1.1
