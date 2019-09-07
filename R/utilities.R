@@ -1,3 +1,11 @@
+#' @title Not-In
+#'
+#' @param x Variable 1
+#' @param y Variable 2
+#'
+#' @export
+#'
+
 # define %notin% function
 "%!in%" <- function(x,y){!("%in%"(x,y))}
 

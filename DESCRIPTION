@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2019-08-17 18:18:22 UTC
+Date/Publication: 2019-09-07 09:50:56 UTC
 Imports: 
     data.table,
     e1071,
