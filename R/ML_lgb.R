@@ -15,7 +15,7 @@
 #'
 #'
 lgbCV <- function(data, params, eval, cat_features = NULL, validationset, earlystop = 1000, seed = 17,
-                  eval_freq = 20, nfold = 10, nrounds = 5e4){
+                  eval_freq = 20, nfold = 10, nrounds = 5e4, verbose = 1){
 
   # measure time
   start.time <- Sys.time()
@@ -31,7 +31,9 @@ lgbCV <- function(data, params, eval, cat_features = NULL, validationset, earlys
                    nfold = nfold,
                    early_stopping_rounds = earlystop,
                    stratified = T,
-                   categorical_feature = cat_features)
+                   showsd = T,
+                   categorical_feature = cat_features,
+                   verbose = verbose)
 
   cat("Best iter:", lgb_cv$best_iter)
 

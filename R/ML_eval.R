@@ -16,11 +16,17 @@ evalBinaryMetrics <- function(prediction, true_vals, positive = "1", cutoff=0.5)
     is.numeric(true_vals),
     cutoff >= 0.1 && cutoff <= 0.9
   )
+  
+  roc <- PRROC::roc.curve(scores.class0 = prediction[true_vals == positive],
+                          scores.class1 = prediction[true_vals != positive],
+                          curve = T)
+  pr <- PRROC::pr.curve(scores.class0 = prediction[true_vals == positive],
+                           scores.class1 = prediction[true_vals != positive],
+                        curve = T)
+  
 
   y_pred <- as.numeric(as.character(ifelse(prediction > cutoff, 1, 0)))
   y_true <- as.numeric(as.character(true_vals))
-
-  roc_pred <- ROCR::prediction(prediction, true_vals)
 
   return(
     list(
@@ -32,7 +38,8 @@ evalBinaryMetrics <- function(prediction, true_vals, positive = "1", cutoff=0.5)
       acc = MLmetrics::Accuracy(y_pred = y_pred, y_true = y_true),
       f1s = MLmetrics::F1_Score(y_pred = y_pred, y_true = y_true, positive = positive),
       conmat = MLmetrics::ConfusionMatrix(y_pred = y_pred, y_true = y_true),
-      roc.perf = ROCR::performance(roc_pred, measure = "tpr", x.measure = "fpr")
+      roc = roc,
+      pr = pr
     )
   )
 }
