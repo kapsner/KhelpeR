@@ -1,0 +1,134 @@
+---
+title: "Title Of Your Magic Analyses"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    #code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setup
+
+## Package Loading 
+
+```{r results='hide', message=F}
+library(data.table)
+library(DT)
+library(ggplot2)
+library(partykit)
+library(psych)
+library(PerformanceAnalytics)
+```
+
+## LightGBM: Load and Print Evaluation Table  
+
+```{r}
+eval_table <- fread("./eval_binary_lightgbm.csv")
+DT::datatable(eval_table, options = list(scrollX = TRUE, pageLength = 20))
+```
+
+# Correlation Plots 
+
+```{r}
+library(PerformanceAnalytics)
+chart.Correlation(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "is_unbalance", "boost_from_avg", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score")])
+```
+
+# Heatmap 
+
+```{r}
+stats::heatmap(as.matrix(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "is_unbalance", "boost_from_avg", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score")]), scale = "column")
+```
+
+# Heatmap 2
+
+```{r}
+library(plyr)
+hdf <- melt(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "is_unbalance", "boost_from_avg", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score")])
+hdf2 <- ddply(hdf, .(variable), transform, rescale = rescale(value))
+
+ggplot(hdf2, aes(variable)) + 
+  geom_tile(aes(fill = rescale), colour = "white") +
+  scale_fill_gradient(low = "white", high = "steelblue")
+```
+
+
+# Plot Evaluations
+
+```{r}
+# AUC vs. submission number
+ggplot(eval_table, aes(x=Number)) +
+  geom_point(aes(y=AUC_PUBLIC, color="public")) + 
+  geom_point(aes(y=AUC, color="validation")) + 
+  scale_fill_manual(values = wes_palette("GrandBudapest2")) + 
+  labs(y="validation AUC")
+
+# learning rate
+ggplot(eval_table, aes(x=learning_rate, y=AUC, colour=Number)) +
+  geom_point() + 
+  labs(y="validation AUC")
+
+# num leaves
+ggplot(eval_table, aes(x=num_leaves, y=AUC, colour=Number)) +
+  geom_point() + 
+  labs(y="validation AUC")
+
+# min data
+ggplot(eval_table, aes(x=min_data_in_leaf, y=AUC, colour=Number)) +
+  geom_point() + 
+  labs(y="validation AUC")
+
+# min sum
+ggplot(eval_table, aes(x=min_sum_hessian_in_leaf, y=AUC, colour=Number)) +
+  geom_point() + 
+  labs(y="validation AUC")
+```
+
+# Ctree-Approach
+
+## AUC 
+
+```{r}
+ct <- party::ctree(AUC ~ ., data = na.omit(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score", "is_unbalance", "boost_from_avg", "learning_rate", "N_features", "PRAUC")]), controls = party::ctree_control(mincriterion = 0.5))
+
+plot(ct)
+```
+
+## AUC 
+
+```{r}
+ct <- party::ctree(PRAUC ~ ., data = na.omit(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score", "is_unbalance", "boost_from_avg", "learning_rate", "N_features", "AUC")]), controls = party::ctree_control(mincriterion = 0.5))
+
+plot(ct)
+```
+
+## Accuracy  
+
+```{r}
+ct <- party::ctree(Accuracy ~ ., data = na.omit(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "AUC", "F1_Score", "is_unbalance", "boost_from_avg", "N_features", "PRAUC")]), controls = party::ctree_control(mincriterion = 0.5))
+
+plot(ct)
+```
+
+## F1_Score  
+
+```{r}
+ct <- party::ctree(F1_Score ~ ., data = na.omit(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "AUC", "Accuracy", "is_unbalance", "boost_from_avg", "N_features", "PRAUC")]), controls = party::ctree_control(mincriterion = 0.5))
+
+plot(ct)
+```
+
+# Linear Regression 
+
+```{r}
+glm.model <- glm(AUC ~ ., data = na.omit(eval_table[,-c("Number", "CV_time", "best_iter", "AUC_PUBLIC", "filename", "TP", "FP", "TN", "FN", "Precision", "Sensitivity", "Specificity", "Accuracy", "F1_Score", "is_unbalance", "boost_from_avg", "learning_rate", "N_features", "PRAUC")]), family = binomial(link = "logit"))
+
+summary(glm.model)
+```

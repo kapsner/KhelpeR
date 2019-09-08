@@ -24,5 +24,7 @@ Imports:
 Suggests: 
     testthat,
     datasets,
-    qpdf
+    qpdf,
+    rmarkdown
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

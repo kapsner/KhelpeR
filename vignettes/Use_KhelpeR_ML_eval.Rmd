@@ -1,0 +1,79 @@
+---
+title: "Use_KhelpeR: Evaluate ML Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR_ML_eval}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+```
+
+# Initialize Model Evaluation Table for binary lightGBM model
+
+```{r}
+if (file.exists("./eval_binary_lightgbm.csv")){
+  cat("\nTable already exists: load it!\n")
+  eval_table <- data.table::fread("./eval_binary_lightgbm.csv", header = T)
+} else {
+  eval_table <- data.table::fread(system.file("./ML/eval/eval_binary_lgb.csv", package = "KhelpeR"), header = T)
+}
+```
+
+# Calculate Binary Metrics
+
+```{r}
+preds_valid <- predict(lgb.model.cv, as.matrix(train_data[-train.index[,1],vec, with = F]))
+binaryMetrics(prediction = ifelse(preds_valid < 0.5, 0, 1), target = label_train[-train.index[,1]], positive = "1")
+```
+
+
+# LightGBM: Export Eval Table 
+
+```{r}
+eval_table <- rbind(eval_table,
+                    cbind("Number" = as.integer(as.character(nrow(eval_table)+1)),
+                          "N_features" = as.integer(as.character(ncol(train_data)-2)),
+                          "CV_time" = as.numeric(as.character(cv.time)),
+                          "best_iter" = as.integer(as.character(best.iter.cv)),
+                          "boost_from_avg" = lgb.params[["boost_from_average"]],
+                          "is_unbalance" = lgb.params[["is_unbalance"]],
+                          "learning_rate" = as.numeric(as.character(lgb.params[["learning_rate"]])),
+                          "num_leaves" = as.integer(as.character(lgb.params[["num_leaves"]])),
+                          "min_data_in_leaf" = as.integer(as.character(lgb.params[["min_data_in_leaf"]])),
+                          "min_sum_hessian_in_leaf" = as.numeric(as.character(lgb.params[["min_sum_hessian_in_leaf"]])),
+                          "bagging_fraction" = as.numeric(as.character(lgb.params[["bagging_fraction"]])),
+                          "bagging_freq" = as.integer(as.character(lgb.params[["bagging_freq"]])),
+                          "feature_fraction" = as.numeric(as.character(lgb.params[["feature_fraction"]])),
+                          "lambda_l1" = as.numeric(as.character(lgb.params[["lambda_l1"]])),
+                          "lambda_l2" = as.numeric(as.character(lgb.params[["lambda_l2"]])),
+                          "min_gain_to_split" = as.numeric(as.character(lgb.params[["min_gain_to_split"]])),
+                          "min_data_per_group" = as.integer(as.character(lgb.params[["min_data_per_group"]])),
+                          "AUC" = as.numeric(as.character(v.auc)),
+                          "PRAUC" = as.numeric(as.character(v.prauc)),
+                          "Precision" = as.numeric(as.character(v.pre)),
+                          "Sensitivity" = as.numeric(as.character(v.sen)),
+                          "Specificity" = as.numeric(as.character(v.spe)),
+                          "Accuracy" = as.numeric(as.character(v.acc)),
+                          "F1_Score" = as.numeric(as.character(v.f1s)),
+                          "TN" = as.integer(as.character(v.conmat[1])),
+                          "FN" = as.integer(as.character(v.conmat[2])),
+                          "FP" = as.integer(as.character(v.conmat[3])),
+                          "TP" = as.integer(as.character(v.conmat[4])),
+                          "AUC_PUBLIC" = NA,
+                          "filename" = as.character(filename)))
+data.table::fwrite(eval_table, "./eval_binary_lightgbm.csv", 
+                   row.names = F, 
+                   sep = ",", 
+                   dec = ".")
+invisible(gc())
+```

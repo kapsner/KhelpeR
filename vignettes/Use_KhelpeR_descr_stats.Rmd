@@ -1,8 +1,8 @@
 ---
-title: "Use_KhelpeR"
+title: "Use_KhelpeR: Descriptive Statistics"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Use_KhelpeR}
+  %\VignetteIndexEntry{Use_KhelpeR_descr_stats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
