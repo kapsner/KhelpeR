@@ -9,7 +9,8 @@
 #' @param seed A integer value. Seed for reproducibility (default: 17).
 #' @param eval_freq A integer value (default: 20).
 #' @param nfold A integer value (default: 10).
-#' @param nfold A integer value (default: 5e4)
+#' @param nrounds A integer value (default: 5e4).
+#' @param verbose
 #'
 #' @export
 #'
@@ -56,7 +57,8 @@ lgbCV <- function(data, params, eval, cat_features = NULL, validationset, earlys
                          nrounds = lgb_cv$best_iter,
                          valids = valids,
                          eval_freq = eval_freq,
-                         categorical_feature = cat_features)
+                         categorical_feature = cat_features,
+                         verbose = verbose)
 
   # measure time
   end.time <- Sys.time()
