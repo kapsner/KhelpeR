@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2019-09-07 09:50:56 UTC
+Date/Publication: 2019-09-11 15:41:13 UTC
 Imports: 
     data.table,
     e1071,
@@ -20,11 +20,14 @@ Imports:
     magrittr,
     sjstats,
     knitr,
-    kableExtra
+    kableExtra,
+    ROCR,
+    caret,
+    MLmetrics,
+    tidyr,
+    dplyr
 Suggests: 
     testthat,
     datasets,
-    qpdf,
-    rmarkdown
+    qpdf
 RoxygenNote: 6.1.1
-VignetteBuilder: knitr

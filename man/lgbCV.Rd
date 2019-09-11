@@ -6,7 +6,7 @@
 \usage{
 lgbCV(data, params, eval, cat_features = NULL, validationset,
   earlystop = 1000, seed = 17, eval_freq = 20, nfold = 10,
-  nrounds = 50000)
+  nrounds = 50000, verbose = 1)
 }
 \arguments{
 \item{data}{A lgb.Dataset.}
@@ -27,7 +27,9 @@ lgbCV(data, params, eval, cat_features = NULL, validationset,
 
 \item{nfold}{A integer value (default: 10).}
 
-\item{nfold}{A integer value (default: 5e4)}
+\item{nrounds}{A integer value (default: 5e4).}
+
+\item{verbose}{}
 }
 \description{
 lgbCV
