@@ -1,7 +1,7 @@
 # shapiro utility
-shaprioUtil <- function(dataset, variable, digits=3){
+shaprioUtil <- function(dataset, var, digits=3){
   outdat <- tryCatch({
-    shap <- stats::shapiro.test(dataset[,get(variable)])
+    shap <- stats::shapiro.test(dataset[,get(var)])
     outdat <- data.table::data.table(
       rbind(c("Method:", shap$method),
             c("W-statistic:", unname(round(shap$statistic, digits))),

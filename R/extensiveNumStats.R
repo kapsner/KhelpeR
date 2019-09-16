@@ -101,14 +101,14 @@ numStatsTable <- function(dataset, group_var = NULL, method = "all"){
 
   if (is.null(group_var)){
     table <- cbind(Name = character(), table)
-    for (variable in vec){
-      table <- rbind(table, cbind(Name = variable, dataset[,extensiveNumStats(get(variable))]))
+    for (var in vec){
+      table <- rbind(table, cbind(Name = var, dataset[,extensiveNumStats(get(var))]))
     }
   } else {
     # TODO test for factor or character here
     table <- cbind(Name = character(), Group = character(), table)
     for (variable in vec){
-      table <- rbind(table, cbind(Name = variable, Group = "", dataset[,extensiveNumStats(get(variable))]))
+      table <- rbind(table, cbind(Name = var, Group = "", dataset[,extensiveNumStats(get(var))]))
       for (group in dataset[,unique(get(group_var))]){
         table <- rbind(table, cbind(Name = "", Group = paste0("Group: ", group), dataset[get(group_var)==group,extensiveNumStats(get(variable))]))
       }
@@ -135,19 +135,20 @@ numStatsTable <- function(dataset, group_var = NULL, method = "all"){
 #' @param dataset The dataset to analyze. It must be of the class 'data.table'.
 #' @param group_var A character. Name of the grouping variable. The grouping variable
 #'   should be of the type 'factor'.
+#' @param var A character. Name of the variable to analyze.
 #'
 #' @importFrom magrittr %>%
 #' @importFrom data.table ":=" ".N" ".SD"
 #'
 #' @export
 #'
-numStatsTablePerCat <- function(dataset, variable, group_var){
+numStatsTablePerCat <- function(dataset, var, group_var){
 
   stopifnot(
     data.table::is.data.table(dataset),
     is.character(variable),
     is.character(group_var),
-    is.numeric(dataset[,get(variable)]),
+    is.numeric(dataset[,get(var)]),
     is.factor(dataset[,get(group_var)])
   )
 
@@ -162,7 +163,7 @@ numStatsTablePerCat <- function(dataset, variable, group_var){
 
     outdat <- cbind(outdat,
                     data.table::data.table(
-                      t(dataset[get(group_var)==cat,extensiveNumStats(get(variable))])
+                      t(dataset[get(group_var)==cat,extensiveNumStats(get(var))])
                     ))
   }
   colnames(outdat) <- c(" ", paste("Category:", cols[2:length(cols)]))

@@ -32,9 +32,9 @@ extensiveCatStats <- function(dataset, response_var, digits = 4){
 
   outlist <- list()
 
-  for (variable in vec){
+  for (var in vec){
     ta <- data.table::data.table(
-      table(dataset[,get(variable)], dataset[,get(response_var)], dnn = c(variable, response_var))
+      table(dataset[,get(var)], dataset[,get(response_var)], dnn = c(var, response_var))
     )
     if (nrow(ta) > 4){
       r <- nrow(ta) - 4

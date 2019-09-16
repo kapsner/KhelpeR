@@ -4,8 +4,8 @@ se <- function(vector){
   return(stats::sd(vector, na.rm = T) / sqrt(length(vector[!is.na(vector)])))
 }
 
-distribution <- function(dataset, variable, digits = 2){
-  vec <- round(dataset[!is.na(get(variable)),get(variable)], digits)
+distribution <- function(dataset, var, digits = 2){
+  vec <- round(dataset[!is.na(get(var)),get(var)], digits)
   ret <- paste(round(base::min(vec), digits),
                round(base::mean(vec), digits),
                round(stats::median(vec), digits),

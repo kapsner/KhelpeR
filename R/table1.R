@@ -45,16 +45,16 @@ fillTable1Num <- function(dataset, group_var = NULL, digits = 2){
   }
 
   # iterate over numeric variables
-  for (variable in vec){
-    shap <- shaprioUtil(dataset, variable, digits = digits)
+  for (var in vec){
+    shap <- shaprioUtil(dataset, var, digits = digits)
     new_data <- data.table::data.table(
-      Name = variable,
-      N = as.numeric(dataset[!is.na(get(variable)),.N]),
-      "Distribution (min/mean/med/max/sd)" = distribution(dataset, variable, digits),
+      Name = var,
+      N = as.numeric(dataset[!is.na(get(var)),.N]),
+      "Distribution (min/mean/med/max/sd)" = distribution(dataset, var, digits),
       Normality = paste0("p=", shap[3,"value",with=F], pMarker(shap[3,"value",with=F]), paste0(" (W=", shap[2,"value",with=F], ")"))
     )
     if (!is.null(group_var)){
-      levene <- leveneUtil(dataset, variable, group_var, digits = digits)
+      levene <- leveneUtil(dataset, var, group_var, digits = digits)
       new_data[["Group"]] <- ""
       new_data[["Homoscedasticity"]] <- paste0("p=", levene[3,"value",with=F], pMarker(levene[3,"value",with=F]), paste0(" (F=", levene[2,"value",with=F], ")"))
     }
@@ -65,12 +65,12 @@ fillTable1Num <- function(dataset, group_var = NULL, digits = 2){
     if (!is.null(group_var)){
       for (gr in dataset[,unique(get(group_var))]){
         subset <- dataset[get(group_var)==gr,]
-        shap_sub <- shaprioUtil(subset, variable, digits = digits)
+        shap_sub <- shaprioUtil(subset, var, digits = digits)
         table1 <- rbind(table1,
                         data.table::data.table(Name = "",
                                                Group = paste0("Group: ", gr),
-                                               N = subset[!is.na(get(variable)),.N],
-                                               "Distribution (min/mean/med/max/sd)" = distribution(subset, variable, digits),
+                                               N = subset[!is.na(get(var)),.N],
+                                               "Distribution (min/mean/med/max/sd)" = distribution(subset, var, digits),
                                                Normality = paste0("p=", shap_sub[3,"value",with=F], pMarker(shap_sub[3,"value",with=F]), paste0(" (W=", shap_sub[2,"value",with=F], ")")),
                                                Homoscedasticity = "")
         )

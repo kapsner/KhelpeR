@@ -17,7 +17,7 @@ initializeTable1Cat <- function(grouped = FALSE){
   return(table1)
 }
 
-#' @title Calculate Overview Statistics For Categorical Variables
+#' @title Calculate Overview Statistics For Categorical vars
 #'
 #' @param dataset The dataset to analyze. It must be of the class 'data.table'.
 #' @param show_levels A logical.
@@ -45,17 +45,17 @@ fastCatStats <- function(dataset, show_levels = FALSE){
     table1 <- initializeTable1Cat(grouped = TRUE)
   }
 
-  # iterate over numeric variables
-  for (variable in vec){
+  # iterate over numeric vars
+  for (var in vec){
     # get N
-    N <- as.numeric(dataset[!is.na(get(variable)),.N])
+    N <- as.numeric(dataset[!is.na(get(var)),.N])
 
     new_data <- data.table::data.table(
-      Name = variable,
+      Name = var,
       N = N,
-      "NA" = as.numeric(dataset[is.na(get(variable)),.N]),
-      Levels = as.numeric(dataset[,nlevels(get(variable))]),
-      Mode = as.character(dataset[,modeFn(get(variable))])
+      "NA" = as.numeric(dataset[is.na(get(var)),.N]),
+      Levels = as.numeric(dataset[,nlevels(get(var))]),
+      Mode = as.character(dataset[,modeFn(get(var))])
     )
     if (isTRUE(show_levels)){
       new_data[["Category"]] <- ""
@@ -65,13 +65,13 @@ fastCatStats <- function(dataset, show_levels = FALSE){
     table1 <- rbind(table1, new_data)
 
     if (isTRUE(show_levels)){
-      for (lv in dataset[,levels(get(variable))]){
+      for (lv in dataset[,levels(get(var))]){
         table1 <- rbind(table1,
                         data.table::data.table(Name = "",
                                                Category = paste0("Group: ", lv),
-                                               N = dataset[get(variable)==lv,.N],
+                                               N = dataset[get(var)==lv,.N],
                                                "NA" = "",
-                                               "% Valid" = dataset[get(variable)==lv,.N] / N * 100,
+                                               "% Valid" = dataset[get(var)==lv,.N] / N * 100,
                                                Levels = "",
                                                Mode = "")
         )

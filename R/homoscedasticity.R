@@ -1,7 +1,7 @@
 # levene utility
-leveneUtil <- function(dataset, variable, group, digits = 3){
+leveneUtil <- function(dataset, var, group, digits = 3){
   outdat <- tryCatch({
-    levene <- car::leveneTest(y = dataset[,get(variable)], group = dataset[,get(group)], center = stats::median)
+    levene <- car::leveneTest(y = dataset[,get(var)], group = dataset[,get(group)], center = stats::median)
     outdat <- data.table::data.table(
       rbind(c("Method:", attributes(levene)$heading),
             c("F-value:", round(levene$`F value`[1], digits)),
