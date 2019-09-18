@@ -2,7 +2,7 @@
 % Please edit documentation in R/fastCatStats.R
 \name{fastCatStats}
 \alias{fastCatStats}
-\title{Calculate Overview Statistics For Categorical Variables}
+\title{Calculate Overview Statistics For Categorical vars}
 \usage{
 fastCatStats(dataset, show_levels = FALSE)
 }
@@ -12,5 +12,5 @@ fastCatStats(dataset, show_levels = FALSE)
 \item{show_levels}{A logical.}
 }
 \description{
-Calculate Overview Statistics For Categorical Variables
+Calculate Overview Statistics For Categorical vars
 }

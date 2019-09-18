@@ -7,7 +7,7 @@
 #'
 
 # define %notin% function
-"%!in%" <- function(x,y){!("%in%"(x,y))}
+"%notin%" <- function(x,y){!("%in%"(x,y))}
 
 # define getTimestamp function
 getTimestamp <- function(mode){

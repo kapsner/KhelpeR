@@ -4,10 +4,12 @@
 \alias{numStatsTablePerCat}
 \title{Create Numeric Statistics of one Variable per Category}
 \usage{
-numStatsTablePerCat(dataset, variable, group_var)
+numStatsTablePerCat(dataset, var, group_var)
 }
 \arguments{
 \item{dataset}{The dataset to analyze. It must be of the class 'data.table'.}
+
+\item{var}{A character. Name of the variable to analyze.}
 
 \item{group_var}{A character. Name of the grouping variable. The grouping variable
 should be of the type 'factor'.}
