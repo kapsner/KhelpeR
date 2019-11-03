@@ -187,34 +187,45 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
   # init table
   table <- extensive_stats(NULL)
 
-  if (is.null(group_var)){
-    table <- cbind(Name = character(), table)
-    for (var in vec){
+  if (is.null(group_var)) {
+    table <- cbind(Name = character(),
+                   Type = character(),
+                   table)
+    for (var in vec) {
       table <- data.table::rbindlist(
         list(
           table,
-          cbind(Name = var, dataset[,extensive_stats(get(var))])
+          cbind(Name = var,
+                Type = class(var),
+                dataset[,extensive_stats(get(var))])
         ),
         fill = TRUE
       )
     }
   } else {
     # TODO test for factor or character here
-    table <- cbind(Name = character(), Group = character(), table)
-    for (variable in vec){
+    table <- cbind(Name = character(),
+                   Group = character(),
+                   Type = character(),
+                   table)
+    for (variable in vec) {
       table <- data.table::rbindlist(
         list(
           table,
-          cbind(Name = var, Group = "", dataset[,extensive_stats(get(var))])
+          cbind(Name = var,
+                Group = "",
+                Type = class(var),
+                dataset[,extensive_stats(get(var))])
         ),
         fill = TRUE
       )
-      for (group in dataset[,unique(get(group_var))]){
+      for (group in dataset[,unique(get(group_var))]) {
         table <- data.table::rbindlist(
           list(
             table,
             cbind(Name = "",
                   Group = paste0("Group: ", group),
+                  Type = "",
                   dataset[get(group_var)==group,extensive_stats(get(variable))]
             )
           ),

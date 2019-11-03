@@ -37,7 +37,7 @@ dataset[,(vec):=lapply(.SD, factor), .SDcols=vec]
 ### Simple Numeric Statistics 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::fastNumStats(dataset))
+KhelpeR::kable_table(KhelpeR::fastNumStats(dataset))
 ```
 
 ### Extensive Numeric Statistics 
@@ -45,19 +45,19 @@ KhelpeR::kableTable(KhelpeR::fastNumStats(dataset))
 With the default parameter 'method = "all"' (=default), you get a table with extensive numerical statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::stats_table(dataset))
+KhelpeR::kable_table(KhelpeR::stats_table(dataset))
 ```
 
 Setting the parameter 'method' to "base", results in a table with basic numerical statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::stats_table(dataset, method = "base"))
+KhelpeR::kable_table(KhelpeR::stats_table(dataset, method = "base"))
 ```
 
 Setting the parameter 'method' to "others", results in a table with the complexer other part of the numeric statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::stats_table(dataset, method = "others"))
+KhelpeR::kable_table(KhelpeR::stats_table(dataset, method = "others"))
 ```
 
 ### Grouping 
@@ -65,13 +65,13 @@ KhelpeR::kableTable(KhelpeR::stats_table(dataset, method = "others"))
 It is also possible to introduce a grouping variable to the function to show the statistisics for each variable and group separately.
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::stats_table(dataset, group_var = "gear", method = "base"))
+KhelpeR::kable_table(KhelpeR::stats_table(dataset, group_var = "gear", method = "base"))
 ```
 
 #### Extensive Numeric Statistics per Category
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::stats_tablePerCat(dataset, "mpg", "gear"))
+KhelpeR::kable_table(KhelpeR::stats_tablePerCat(dataset, "mpg", "gear"))
 ```
 
 ## Table 1 
@@ -81,22 +81,22 @@ KhelpeR::kableTable(KhelpeR::stats_tablePerCat(dataset, "mpg", "gear"))
 Every paper has a 'Table 1' to show descriptive statistics about the data set. The function 'fillTable1Num()' easily creates this table for numerical data. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::fillTable1Num(dataset))
+KhelpeR::kable_table(KhelpeR::fillTable1Num(dataset))
 ```
 
 You can also create 'Table 1' grouped by a grouping variable. This adds the calculation of the homoscedasticity between the respective groups for each variable. It is also possible to specify the number of digits in the output table. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::fillTable1Num(dataset, group_var = "gear", digits = 3))
+KhelpeR::kable_table(KhelpeR::fillTable1Num(dataset, group_var = "gear", digits = 3))
 ```
 
 ## Descriptive Categorical Data 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::fastCatStats(dataset))
+KhelpeR::kable_table(KhelpeR::fastCatStats(dataset))
 ```
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::fastCatStats(dataset, show_levels = TRUE))
+KhelpeR::kable_table(KhelpeR::fastCatStats(dataset, show_levels = TRUE))
 ```
 
