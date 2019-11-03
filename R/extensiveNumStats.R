@@ -207,7 +207,7 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
           cbind(Name = "",
                 Group = paste0("Group: ", group),
                 dataset[get(group_var)==group,extensive_stats(get(variable))]
-          )
+          ),
           fill = TRUE
         )
       }
