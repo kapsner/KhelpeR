@@ -187,8 +187,10 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
     table <- cbind(Name = character(), table)
     for (var in vec){
       table <- data.table::rbindlist(
-        table,
-        cbind(Name = var, dataset[,extensive_stats(get(var))]),
+        list(
+          table,
+          cbind(Name = var, dataset[,extensive_stats(get(var))])
+        ),
         fill = TRUE
       )
     }
@@ -197,16 +199,20 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
     table <- cbind(Name = character(), Group = character(), table)
     for (variable in vec){
       table <- data.table::rbindlist(
-        table,
-        cbind(Name = var, Group = "", dataset[,extensive_stats(get(var))]),
+        list(
+          table,
+          cbind(Name = var, Group = "", dataset[,extensive_stats(get(var))])
+        ),
         fill = TRUE
       )
       for (group in dataset[,unique(get(group_var))]){
         table <- data.table::rbindlist(
-          table,
-          cbind(Name = "",
-                Group = paste0("Group: ", group),
-                dataset[get(group_var)==group,extensive_stats(get(variable))]
+          list(
+            table,
+            cbind(Name = "",
+                  Group = paste0("Group: ", group),
+                  dataset[get(group_var)==group,extensive_stats(get(variable))]
+            )
           ),
           fill = TRUE
         )

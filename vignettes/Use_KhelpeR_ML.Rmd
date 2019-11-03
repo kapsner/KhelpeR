@@ -1,0 +1,26 @@
+---
+title: "Use_KhelpeR_ML"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR_ML}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+```
+
+# Load Preprocessing Template
+
+```{r eval = FALSE}
+rstudioapi::navigateToFile(system.file("ML/rmd/ML_beginner.Rmd", package = "KhelpeR"))
+```
+
