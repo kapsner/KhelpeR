@@ -45,19 +45,19 @@ KhelpeR::kableTable(KhelpeR::fastNumStats(dataset))
 With the default parameter 'method = "all"' (=default), you get a table with extensive numerical statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::numStatsTable(dataset))
+KhelpeR::kableTable(KhelpeR::stats_table(dataset))
 ```
 
 Setting the parameter 'method' to "base", results in a table with basic numerical statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::numStatsTable(dataset, method = "base"))
+KhelpeR::kableTable(KhelpeR::stats_table(dataset, method = "base"))
 ```
 
 Setting the parameter 'method' to "others", results in a table with the complexer other part of the numeric statistics. 
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::numStatsTable(dataset, method = "others"))
+KhelpeR::kableTable(KhelpeR::stats_table(dataset, method = "others"))
 ```
 
 ### Grouping 
@@ -65,13 +65,13 @@ KhelpeR::kableTable(KhelpeR::numStatsTable(dataset, method = "others"))
 It is also possible to introduce a grouping variable to the function to show the statistisics for each variable and group separately.
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::numStatsTable(dataset, group_var = "gear", method = "base"))
+KhelpeR::kableTable(KhelpeR::stats_table(dataset, group_var = "gear", method = "base"))
 ```
 
 #### Extensive Numeric Statistics per Category
 
 ```{r}
-KhelpeR::kableTable(KhelpeR::numStatsTablePerCat(dataset, "mpg", "gear"))
+KhelpeR::kableTable(KhelpeR::stats_tablePerCat(dataset, "mpg", "gear"))
 ```
 
 ## Table 1 
