@@ -21,6 +21,9 @@ library(KhelpeR)
 # Load Preprocessing Template
 
 ```{r eval = FALSE}
-rstudioapi::navigateToFile(system.file("ML/rmd/ML_beginner.Rmd", package = "KhelpeR"))
+file.copy(from = system.file("ML/rmd/ML_beginner.Rmd",
+                             package = "KhelpeR"),
+          to = "./ML_beginner.Rmd")
+rstudioapi::navigateToFile(file = "./ML_beginner.Rmd")
 ```
 

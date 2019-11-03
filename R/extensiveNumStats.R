@@ -7,17 +7,8 @@ extensive_stats <- function(vector,
       vector <- unname(t(vector))
     }
 
+    # for all variable types
     fac_vec <- factor(vector)
-    Q <- stats::quantile(
-      vector,
-      probs = c(.25, .75),
-      na.rm = T,
-      names = F
-    )
-    I_out <- stats::IQR(
-      vector,
-      na.rm = T
-    ) * 1.5
 
     retdt <- list(
       N = as.numeric(base::sum(!is.na(vector))),
@@ -25,7 +16,20 @@ extensive_stats <- function(vector,
       Unique = as.numeric(base::nlevels(fac_vec))
     )
 
+    # only numeric variable types
     if (is.numeric(vector)) {
+
+      Q <- stats::quantile(
+        vector,
+        probs = c(.25, .75),
+        na.rm = T,
+        names = F
+      )
+      I_out <- stats::IQR(
+        vector,
+        na.rm = T
+      ) * 1.5
+
       retdt <- c(retdt,
                  list(
                    Min = round(
