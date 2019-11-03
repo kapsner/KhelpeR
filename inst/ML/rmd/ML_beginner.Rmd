@@ -16,37 +16,70 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(out.width = "80%")
 ```
 
+```{r echo=FALSE}
+library(KhelpeR)
+```
+
 # Data Loading
 
 ```{r}
 # specify variables here
 dir_input <- "./data/"
-file_train <- "train.csv"
-file_test <- "test.csv"
+filename_train <- "train.csv"
+filename_test <- "test.csv"
 ```
 
 ```{r}
 data_train <- data.table::fread(
-  file = paste0(dir_input, file_train),
+  file = paste0(dir_input, filename_train),
   header = T,
   stringsAsFactors = F
 )
 
 data_test <- data.table::fread(
-  file = paste0(dir_input, file_test),
+  file = paste0(dir_input, filename_test),
   header = T,
   stringsAsFactors = F
 )
+rm(dir_input, filename_train, filename_test)
 ```
 
-# First Data Overview 
+# Getting First Data Overview 
 
-## 
-# Identify And Define ID_COL and TARGET_COL
+## Train Data
+
+```{r}
+KhelpeR::kable_table(
+  KhelpeR::stats_table(data_train, method = "base")
+)
+```
+
+```{r}
+KhelpeR::kable_table(
+  KhelpeR::stats_table(data_train, method = "others")
+)
+```
+
+## Test Data
+
+```{r}
+KhelpeR::kable_table(
+  KhelpeR::stats_table(data_test, method = "base")
+)
+```
+
+```{r}
+KhelpeR::kable_table(
+  KhelpeR::stats_table(data_test, method = "others")
+)
+```
+
+# Identify and Define ID_COL and TARGET_COL
 
 ```{r}
 ID_COL <- "YOUR_ID_CODE_HERE"
 TARGET_COL <- "YOUR_TARGET_ID_HERE"
+OBJECTIVE <- "classification"/"regression"
 ```
 
 # Data Preprocessing
@@ -55,31 +88,60 @@ TARGET_COL <- "YOUR_TARGET_ID_HERE"
 
 ```{r}
 # add type col to train_data
-train_data[,type:="train"]
+data_train[, type := "train"]
+
 # add target col + type to test_data
-test_data[,(TARGET_COL):=NA][
-  ,type:="test"
+data_test[, (TARGET_COL) := NA][
+  , type := "test"
 ]
+```
+
+```{r}
 # merge datasets for uniform preprocessing
-dataset <- rbind(train_data, test_data)
-rm(train_data, test_data, data_input)
+dataset <- data.table::rbindlist(
+  list(
+    data_train,
+    data_test
+  )
+)
+rm(data_train, data_test)
 invisible(gc())
 ```
 
-## Check And Set Variable Types
+## Check and Set Variable Types
+
+### Target Variable
 
 ```{r}
 # Define Variable types
-dataset[,(ID_COL):=as.character(get(ID_COL))][
-  , type:=as.character(type)
+dataset[, (ID_COL) := as.character(get(ID_COL))][
+  , type := as.character(type)
 ][
-  , (TARGET_COL):=factor(get(TARGET_COL))
+  , (TARGET_COL) := ifelse(
+    OBJECTIVE == "classification",
+    factor(get(TARGET_COL)),
+    ifelse(OBJECTIVE == "regression",
+           as.numeric(as.character(get(TARGET_COL))),
+           stop(paste0("OBJECTIVE must be one ",
+           "of 'classification' or 'regression'"))
+    )
+  )
 ]
+```
+
+### Set Factors
+
+```{r}
 # factors
-#vec_cat <- colnames(dataset)[]
+#vec_cat <- colnames(dataset)[c()]
 #dataset[,(vec_cat):=lapply(.SD, as.factor), .SDcols=vec_cat]
+```
+
+### Set Numerics
+
+```{r}
 # numeric
-vec_num <- colnames(dataset)[colnames(dataset) %!in% c(ID_COL, TARGET_COL, "type")]
+vec_num <- colnames(dataset)[colnames(dataset) %notin% c(ID_COL, TARGET_COL, "type")]
 # dataset[,(vec_num):=lapply(.SD, function(x){as.numeric(as.character(x))}), .SDcols=vec_num]
 ```
 

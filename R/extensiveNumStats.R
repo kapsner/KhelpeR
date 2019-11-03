@@ -196,7 +196,7 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
         list(
           table,
           cbind(Name = var,
-                Type = class(var),
+                Type = dataset[,class(get(var))],
                 dataset[,extensive_stats(get(var))])
         ),
         fill = TRUE
@@ -214,7 +214,7 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
           table,
           cbind(Name = var,
                 Group = "",
-                Type = class(var),
+                Type = dataset[,class(get(var))],
                 dataset[,extensive_stats(get(var))])
         ),
         fill = TRUE
