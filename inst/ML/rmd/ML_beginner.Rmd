@@ -48,6 +48,12 @@ rm(dir_input, filename_train, filename_test)
 
 ## Train Data
 
+Legend:
+- Neg: number of negative values
+- Pos: number of positive values
+- OutLo: Number of outliers (records below Q25-1.5*IQR, where IQR=Q75-Q25)
+- OutHi: Number of outliers (records above Q75+1.5*IQR, where IQR=Q75-Q25)
+
 ```{r}
 KhelpeR::kable_table(
   KhelpeR::stats_table(data_train, method = "base")
@@ -77,9 +83,9 @@ KhelpeR::kable_table(
 # Identify and Define ID_COL and TARGET_COL
 
 ```{r}
-ID_COL <- "YOUR_ID_CODE_HERE"
-TARGET_COL <- "YOUR_TARGET_ID_HERE"
-OBJECTIVE <- "classification"/"regression"
+ID_COL <- ("YOUR_ID_CODE_HERE")
+TARGET_COL <- ("YOUR_TARGET_ID_HERE")
+OBJECTIVE <- ("classification" or "regression")
 ```
 
 # Data Preprocessing
@@ -129,7 +135,7 @@ dataset[, (ID_COL) := as.character(get(ID_COL))][
 ]
 ```
 
-### Set Factors
+### Set Factor Variables 
 
 ```{r}
 # factors
@@ -137,7 +143,7 @@ dataset[, (ID_COL) := as.character(get(ID_COL))][
 #dataset[,(vec_cat):=lapply(.SD, as.factor), .SDcols=vec_cat]
 ```
 
-### Set Numerics
+### Set Numeric Variables
 
 ```{r}
 # numeric
@@ -145,64 +151,30 @@ vec_num <- colnames(dataset)[colnames(dataset) %notin% c(ID_COL, TARGET_COL, "ty
 # dataset[,(vec_num):=lapply(.SD, function(x){as.numeric(as.character(x))}), .SDcols=vec_num]
 ```
 
-# Descriptive Analysis Of Training Data
+# Descriptive Analysis 
 
-## EDA
-
-```{r results='hide', message=F}
-smb_eda <- smbinning::smbinning.eda(dataset[type=="train",])
-```
-
-### EDA Absolute
+## Overview Trainings Set 
 
 ```{r}
-cat(paste0("\nLegend:
-Neg: number of negative values
-Pos: number of positive values
-OutLo: Number of outliers (records below Q25-1.5*IQR, where IQR=Q75-Q25)
-OutHi: Number of outliers (records above Q75+1.5*IQR, where IQR=Q75-Q25)\n"))
-DT::datatable(smb_eda$eda, options = list(scrollX = TRUE, pageLength = 20))
-# Heatmap
-stats::heatmap(as.matrix(scale(smb_eda$eda[-c(which(smb_eda$eda$Field %in% c(TARGET_COL, ID_COL, "type"))),-c(1:4)])))
+KhelpeR::kable_table(
+  KhelpeR::stats_table(dataset[get("type") == "train",], method = "base")
+)
 ```
 
-### EDA Percentage
+## Overview Test Set
 
 ```{r}
-DT::datatable(smb_eda$edapct, options = list(scrollX = TRUE, pageLength = 20))
-```
-
-### Variables With Missings
-
-```{r}
-smb_eda$eda[which(smb_eda$eda$Miss > 0),]
-```
-
-### More Statistics Of Numeric Variables
-
-```{r}
-if (!is.null(vec_num)){
-  cat(paste("\nLegend:
-  MAD: mean absolute deviation
-  CV: coefficient of variation (relative standard deviation)\n"))
-
-  DT::datatable(fastNumStats(dataset[type=="train",]), options = list(scrollX = TRUE, pageLength = 20)) %>%
-    formatRound(columns=c(2:6), digits=3)
-}
-```
-
-### Summary Statistics Of Categorical Variables
-
-```{r}
-if (!is.null(vec_cat)){
-  DT::datatable(summarytools::freq(dataset[,vec_cat,with=F]), options = list(scrollX = TRUE, pageLength = 20))
-}
+KhelpeR::kable_table(
+  KhelpeR::stats_table(dataset[get("type") == "test",], method = "base")
+)
 ```
 
 ## Analyze ID_COL
 
+Count of duplicated IDs
+
 ```{r}
-cat("\nCount of duplicated IDs:", sum(duplicated(dataset[type=="train",get(ID_COL)])), "\n\n")
+sum(duplicated(dataset[type == "train", get(ID_COL)]))
 ```
 
 ## Analyze TARGET_COL
@@ -211,30 +183,38 @@ cat("\nCount of duplicated IDs:", sum(duplicated(dataset[type=="train",get(ID_CO
 summarytools::freq(dataset[type=="train",get(TARGET_COL)])
 ```
 
+## Missings Treatment
+
+## Categorical Variables Treatment 
+
 # Write Options File
 
 ```{r}
 # generate empty _options.R file
-suppressMessages(suppressWarnings(file.create("_options.R")))
+suppressMessages(suppressWarnings(file.create("options.R")))
+
 # write vec_num
-if (!is.null(vec_num)){
+if (!is.null(vec_num)) {
   out.vec_num <- paste0("vec_num = c('", paste(vec_num, collapse = "', '"), "')\n\n")
 } else {
   out.vec_num <- paste0("vec_num = NULL\n\n")
 }
+
 # write vec_cat
-if (!is.null(vec_cat)){
+if (!is.null(vec_cat)) {
   out.vec_cat <- paste0("vec_cat = c('", paste(vec_cat, collapse = "', '"), "')\n\n")
 } else {
   out.vec_cat <- paste0("vec_cat = NULL\n\n")
 }
+
 # generate message
 message_out <- paste0("ID_COL = '", ID_COL, "'\n",
                       "TARGET_COL = '", TARGET_COL, "'\n\n",
                       out.vec_num,
                       out.vec_cat, "\n\n")
+
 # write message to file
-write(message_out, file = "_options.R")
+write(message_out, file = "options.R")
 rm(message_out, out.vec_cat, out.vec_num)
 invisible(gc())
 ```
@@ -242,13 +222,15 @@ invisible(gc())
 # Save Dataset
 
 ```{r}
-if (!dir.exists("./export/")){
+if (!dir.exists("./export/")) {
   dir.create("./export/")
 }
-fwrite(dataset, "./export/dataset.csv",
-            row.names = F,
-            sep = ",",
-            dec = ".")
+
+data.table::fwrite(x = dataset,
+                   file = "./export/dataset.csv",
+                   row.names = F,
+                   sep = ",",
+                   dec = ".")
 invisible(gc())
 save.image()
 ```
