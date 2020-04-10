@@ -1,6 +1,6 @@
 Package: KhelpeR
 Title: Helper Functions and Misc
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: person('Lorenz', 'Kapsner', email =
  'lorenz.kapsner@gmail.com', role = c('cre', 'aut'))
 Description: My Personal Helper Functions.
@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2019-09-11 15:41:13 UTC
+Date/Publication: 2020-04-10 09:52:03 UTC
 Imports: 
     data.table,
     e1071,
@@ -29,7 +29,4 @@ Imports:
 Suggests: 
     testthat,
     datasets,
-    qpdf,
-    rmarkdown
-RoxygenNote: 6.1.1
-VignetteBuilder: knitr
+    qpdf
