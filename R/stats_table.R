@@ -193,19 +193,20 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
     table <- cbind(Name = character(),
                    Type = character(),
                    table)
-    for (var in vec) {
+    for (variable in vec) {
       table <- data.table::rbindlist(
         list(
           table,
-          cbind(Name = var,
-                Type = dataset[,class(get(var))],
-                dataset[,extensive_stats(get(var))])
+          cbind(Name = variable,
+                Type = dataset[,class(get(variable))],
+                dataset[,extensive_stats(get(variable))])
         ),
         fill = TRUE
       )
     }
   } else {
     # TODO test for factor or character here
+    vec <- setdiff(vec, group_var)
     table <- cbind(Name = character(),
                    Group = character(),
                    Type = character(),
@@ -214,14 +215,14 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
       table <- data.table::rbindlist(
         list(
           table,
-          cbind(Name = var,
+          cbind(Name = variable,
                 Group = "",
-                Type = dataset[,class(get(var))],
-                dataset[,extensive_stats(get(var))])
+                Type = dataset[, class(get(variable))],
+                dataset[, extensive_stats(get(variable))])
         ),
         fill = TRUE
       )
-      for (group in dataset[,unique(get(group_var))]) {
+      for (group in dataset[, unique(get(group_var))]) {
         table <- data.table::rbindlist(
           list(
             table,
@@ -256,23 +257,22 @@ stats_table <- function(dataset, group_var = NULL, method = "all"){
 #' @description This function creates a vast amount of numeric statistics per
 #'   category
 #'
-#' @param dataset The dataset to analyze. It must be of the class 'data.table'.
-#' @param group_var A character. Name of the grouping variable. The grouping
-#'   variable should be of the type 'factor'.
-#' @param var A character. Name of the variable to analyze.
+#' @param variable A character. Name of the variable to analyze.
+#'
+#' @inheritParams stats_table
 #'
 #' @importFrom magrittr %>%
 #' @importFrom data.table ":=" ".N" ".SD"
 #'
 #' @export
 #'
-stats_table_per_cat <- function(dataset, var, group_var){
+stats_table_per_cat <- function(dataset, variable, group_var){
 
   stopifnot(
     data.table::is.data.table(dataset),
     is.character(variable),
     is.character(group_var),
-    is.numeric(dataset[, get(var)]),
+    is.numeric(dataset[, get(variable)]),
     is.factor(dataset[, get(group_var)])
   )
 
@@ -288,7 +288,7 @@ stats_table_per_cat <- function(dataset, var, group_var){
     outdat <- cbind(outdat,
                     data.table::data.table(
                       t(dataset[get(group_var) == cat,
-                                extensive_stats(get(var))])
+                                extensive_stats(get(variable))])
                     ))
   }
   colnames(outdat) <- c(" ", paste("Category:", cols[2:length(cols)]))
