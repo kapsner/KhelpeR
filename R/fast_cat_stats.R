@@ -1,5 +1,5 @@
-initializeTable1Cat <- function(grouped = FALSE){
-  if (isFALSE(grouped)){
+initialize_table1_cat <- function(grouped = FALSE){
+  if (isFALSE(grouped)) {
     table1 <- data.table::data.table("Name" = character(),
                                      "N" = integer(),
                                      "NA" = integer(),
@@ -24,7 +24,7 @@ initializeTable1Cat <- function(grouped = FALSE){
 #'
 #' @export
 
-fastCatStats <- function(dataset, show_levels = FALSE){
+fast_Cat_stats <- function(dataset, show_levels = FALSE){
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -32,30 +32,32 @@ fastCatStats <- function(dataset, show_levels = FALSE){
   )
 
   # subset numeric values
-  vec <- colnames(dataset)[dataset[,sapply(.SD, is.factor), .SDcol=colnames(dataset)]]
+  vec <- colnames(dataset)[dataset[
+    , sapply(.SD, is.factor), .SDcol = colnames(dataset)]
+  ]
 
   stopifnot(
     length(vec) > 0
   )
 
   # init table1
-  if (isFALSE(show_levels)){
-    table1 <- initializeTable1Cat()
+  if (isFALSE(show_levels)) {
+    table1 <- initialize_table1_cat()
   } else if (isTRUE(show_levels)){
-    table1 <- initializeTable1Cat(grouped = TRUE)
+    table1 <- initialize_table1_cat(grouped = TRUE)
   }
 
   # iterate over numeric vars
-  for (var in vec){
+  for (var in vec) {
     # get N
-    N <- as.numeric(dataset[!is.na(get(var)),.N])
+    N <- as.numeric(dataset[!is.na(get(var)), .N])
 
     new_data <- data.table::data.table(
       Name = var,
       N = N,
-      "NA" = as.numeric(dataset[is.na(get(var)),.N]),
-      Levels = as.numeric(dataset[,nlevels(get(var))]),
-      Mode = as.character(dataset[,modeFn(get(var))])
+      "NA" = as.numeric(dataset[is.na(get(var)), .N]),
+      Levels = as.numeric(dataset[, nlevels(get(var))]),
+      Mode = as.character(dataset[, mode_fn(get(var))])
     )
     if (isTRUE(show_levels)){
       new_data[["Category"]] <- ""
@@ -64,16 +66,19 @@ fastCatStats <- function(dataset, show_levels = FALSE){
 
     table1 <- rbind(table1, new_data)
 
-    if (isTRUE(show_levels)){
-      for (lv in dataset[,levels(get(var))]){
-        table1 <- rbind(table1,
-                        data.table::data.table(Name = "",
-                                               Category = paste0("Group: ", lv),
-                                               N = dataset[get(var)==lv,.N],
-                                               "NA" = "",
-                                               "% Valid" = dataset[get(var)==lv,.N] / N * 100,
-                                               Levels = "",
-                                               Mode = "")
+    if (isTRUE(show_levels)) {
+      for (lv in dataset[, levels(get(var))]) {
+        table1 <- rbind(
+          table1,
+          data.table::data.table(
+            Name = "",
+            Category = paste0("Group: ", lv),
+            N = dataset[get(var) == lv, .N],
+            "NA" = "",
+            "% Valid" = dataset[get(var) == lv, .N] / N * 100,
+            Levels = "",
+            Mode = ""
+          )
         )
       }
     }

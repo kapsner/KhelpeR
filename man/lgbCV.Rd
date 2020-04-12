@@ -4,9 +4,19 @@
 \alias{lgbCV}
 \title{lgbCV}
 \usage{
-lgbCV(data, params, eval, cat_features = NULL, validationset,
-  earlystop = 1000, seed = 17, eval_freq = 20, nfold = 10,
-  nrounds = 50000, verbose = 1)
+lgbCV(
+  data,
+  params,
+  eval,
+  cat_features = NULL,
+  validationset,
+  earlystop = 1000,
+  seed = 17,
+  eval_freq = 20,
+  nfold = 10,
+  nrounds = 50000,
+  verbose = 1
+)
 }
 \arguments{
 \item{data}{A lgb.Dataset.}
