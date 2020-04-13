@@ -1,6 +1,6 @@
 Package: KhelpeR
 Title: Helper Functions and Misc
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: person('Lorenz', 'Kapsner', email =
  'lorenz.kapsner@gmail.com', role = c('cre', 'aut'))
 Description: My Personal Helper Functions.
@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2020-04-10 09:52:03 UTC
+Date/Publication: 2020-04-13 14:22:19 UTC
 Imports: 
     data.table,
     e1071,
@@ -17,13 +17,11 @@ Imports:
     dunn.test,
     stats,
     ggplot2,
+    ggpubr,
     magrittr,
     sjstats,
     knitr,
     kableExtra,
-    ROCR,
-    caret,
-    MLmetrics,
     tidyr,
     dplyr
 Suggests: 

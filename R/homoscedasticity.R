@@ -1,21 +1,34 @@
-# levene utility
-leveneUtil <- function(dataset, var, group, digits = 3){
-  outdat <- tryCatch({
-    levene <- car::leveneTest(y = dataset[,get(var)], group = dataset[,get(group)], center = stats::median)
-    outdat <- data.table::data.table(
-      rbind(c("Method:", attributes(levene)$heading),
-            c("F-value:", round(levene$`F value`[1], digits)),
-            c("p-value:", round(levene$`Pr(>F)`[1], digits)))
+levene_util <- function(dataset,
+                        variable,
+                        group_var,
+                        digits = 3,
+                        type = "text") {
+  stopifnot(
+    type %in% c("text", "table"),
+    data.table::is.data.table(dataset),
+    is.numeric(dataset[, get(variable)]),
+    is.factor(dataset[, get(group_var)])
+  )
+  levene <- car::leveneTest(
+    y = dataset[, get(variable)],
+    group = dataset[, get(group_var)],
+    center = stats::median
+  )
+  f <- round(levene$`F value`[1], digits)
+  p <- round(levene$`Pr(>F)`[1], digits)
+  if (type == "text") {
+    ret <- paste0(
+      "F: ", f, "\n",
+      "p: ", p, p_marker(p)
     )
-  }, error = function(e){
-    outdat <- data.table::data.table(
-      rbind(c("Method:", ""),
-            c("F-value:", "Error"),
-            c("p-value:", "Error"))
+  } else if (type == "table") {
+    ret <- data.table::data.table(
+      cbind(
+        "F_value" = f,
+        "p_value" = p,
+        "significance" = p_marker(p)
+      )
     )
-  }, finally = function(f){
-    return(outdat)
-  })
-  colnames(outdat) <- c("", "value")
-  return(outdat)
+  }
+  return(ret)
 }

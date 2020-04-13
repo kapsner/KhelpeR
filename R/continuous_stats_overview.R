@@ -1,25 +1,17 @@
-#' @title Calculate Overview Statistics For Numerical Variables
+#' @title Calculate overview statistics of continuous variables
 #'
-#' @param dataset The dataset to analyze. It must be of the class 'data.table'.
-#' @param digits An integer. Number of digits to round numeric variables
-#'   (default: 2).
+#' @inheritParams continuous_stats
 #'
 #' @export
-
-fast_num_stats <- function(dataset, digits = 2){
+continuous_stats_overview <- function(dataset, digits = 2){
 
   stopifnot(
     data.table::is.data.table(dataset)
   )
 
   # subset numeric values
-  vec <- colnames(dataset)[dataset[
-    , sapply(.SD, is.numeric), .SDcol = colnames(dataset)]
-  ]
-
-  stopifnot(
-    length(vec) > 0
-  )
+  vec <- subset_num_cols(dataset)
+  stopifnot(length(vec) > 0)
 
   # store dataset temporarily
   dat <- dataset[, vec, with = F]

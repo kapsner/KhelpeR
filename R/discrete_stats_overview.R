@@ -1,30 +1,12 @@
-initialize_table1_cat <- function(grouped = FALSE){
-  if (isFALSE(grouped)) {
-    table1 <- data.table::data.table("Name" = character(),
-                                     "N" = integer(),
-                                     "NA" = integer(),
-                                     "Levels" = integer(),
-                                     "Mode" = character())
-  } else {
-    table1 <- data.table::data.table("Name" = character(),
-                                     "Category" = character(),
-                                     "N" = integer(),
-                                     "NA" = integer(),
-                                     "% Valid" = integer(),
-                                     "Levels" = integer(),
-                                     "Mode" = character())
-  }
-  return(table1)
-}
-
-#' @title Calculate Overview Statistics For Categorical vars
+#' @title Calculate overview statistics of discrete variables
 #'
-#' @param dataset The dataset to analyze. It must be of the class 'data.table'.
-#' @param show_levels A logical.
+#' @param show_levels A logical. Display the levels of discrete variables
+#'   (default: FALSE).
+#'
+#' @inheritParams continuous_stats
 #'
 #' @export
-
-fast_Cat_stats <- function(dataset, show_levels = FALSE){
+discrete_stats_overview <- function(dataset, show_levels = FALSE){
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -32,13 +14,8 @@ fast_Cat_stats <- function(dataset, show_levels = FALSE){
   )
 
   # subset numeric values
-  vec <- colnames(dataset)[dataset[
-    , sapply(.SD, is.factor), .SDcol = colnames(dataset)]
-  ]
-
-  stopifnot(
-    length(vec) > 0
-  )
+  vec <- subset_cat_cols(dataset)
+  stopifnot(length(vec) > 0)
 
   # init table1
   if (isFALSE(show_levels)) {
@@ -82,6 +59,25 @@ fast_Cat_stats <- function(dataset, show_levels = FALSE){
         )
       }
     }
+  }
+  return(table1)
+}
+
+initialize_table1_cat <- function(grouped = FALSE){
+  if (isFALSE(grouped)) {
+    table1 <- data.table::data.table("Name" = character(),
+                                     "N" = integer(),
+                                     "NA" = integer(),
+                                     "Levels" = integer(),
+                                     "Mode" = character())
+  } else {
+    table1 <- data.table::data.table("Name" = character(),
+                                     "Category" = character(),
+                                     "N" = integer(),
+                                     "NA" = integer(),
+                                     "% Valid" = integer(),
+                                     "Levels" = integer(),
+                                     "Mode" = character())
   }
   return(table1)
 }

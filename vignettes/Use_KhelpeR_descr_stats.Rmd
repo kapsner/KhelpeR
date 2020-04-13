@@ -1,10 +1,12 @@
 ---
-title: "Use_KhelpeR: Descriptive Statistics"
+title: "KhelpeR: Descriptive Statistics"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Use_KhelpeR_descr_stats}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -17,6 +19,8 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(KhelpeR)
 library(data.table)
+library(mlbench)
+library(magrittr)
 ```
 
 # Introduction 
@@ -26,53 +30,71 @@ KhelpeR is an R package that aims to provide useful functions for several tasks,
 # Exploratory Data Analysis 
 
 ```{r}
-# import data
-dataset <- data.table::data.table(datasets::mtcars)
-vec <- c("cyl", "gear", "vs", "am", "carb")
-dataset[,(vec):=lapply(.SD, factor), .SDcols=vec]
+data("PimaIndiansDiabetes2")
+dataset <- data.table::as.data.table(PimaIndiansDiabetes2)
 ```
 
-## Numeric Statistics 
+## Continuous Statistics 
 
-### Simple Numeric Statistics 
+### Simple Continuous Statistics 
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::fastNumStats(dataset))
+KhelpeR::continuous_stats_overview(dataset) %>%
+  KhelpeR::html_table()
 ```
 
-### Extensive Numeric Statistics 
+### Extensive Continuous Statistics 
 
-With the default parameter 'method = "all"' (=default), you get a table with extensive numerical statistics. 
+With the default parameter 'method = "all"' (=default), you get a table with extensive continuous statistics. 
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::stats_table(dataset))
+KhelpeR::continuous_stats(dataset) %>%
+  KhelpeR::html_table()
 ```
 
-Setting the parameter 'method' to "base", results in a table with basic numerical statistics. 
+Setting the parameter 'method' to "base", results in a table with basic continuous statistics. 
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::stats_table(dataset, method = "base"))
+KhelpeR::continuous_stats(dataset, method = "base") %>%
+  KhelpeR::html_table()
 ```
 
-Setting the parameter 'method' to "others", results in a table with the complexer other part of the numeric statistics. 
+Setting the parameter 'method' to "others", results in a table with the more complex other part of the continuous statistics. 
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::stats_table(dataset, method = "others"))
+KhelpeR::continuous_stats(dataset, method = "others") %>%
+  KhelpeR::html_table()
 ```
 
 ### Grouping 
 
-It is also possible to introduce a grouping variable to the function to show the statistisics for each variable and group separately.
+It is also possible to introduce a grouping variable to the function to show the statistics for each variable and group separately.
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::stats_table(dataset, group_var = "gear", method = "base"))
+KhelpeR::continuous_stats(dataset, group_var = "diabetes") %>%
+  KhelpeR::html_table()
 ```
 
-#### Extensive Numeric Statistics per Category
+#### Extensive Continuous Statistics per Category
 
 ```{r}
-KhelpeR::kable_table(KhelpeR::stats_tablePerCat(dataset, "mpg", "gear"))
+KhelpeR::continuous_stats_grouped(dataset, variable = "glucose", group_var = "diabetes") %>%
+  KhelpeR::html_table()
 ```
+
+## Plotting
+
+### Boxplots
+
+```{r}
+KhelpeR::plot_boxplot(dataset, variable = "glucose", title = "Glucose distribution", ylab = "Glucose")
+```
+
+```{r}
+KhelpeR::plot_boxplot(dataset, variable = "glucose", group_var = "diabetes",
+                      title = "Glucose distribution by presence of diabetes", ylab = "Glucose", xlab = "Diabetes")
+```
+
 
 ## Table 1 
 
@@ -98,5 +120,15 @@ KhelpeR::kable_table(KhelpeR::fastCatStats(dataset))
 
 ```{r}
 KhelpeR::kable_table(KhelpeR::fastCatStats(dataset, show_levels = TRUE))
+```
+
+# Group comparisons
+
+```{r}
+KhelpeR::binary_results(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table(merge_rows = "binary_results")
 ```
 

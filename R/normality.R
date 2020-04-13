@@ -1,21 +1,24 @@
-# shapiro utility
-shaprioUtil <- function(dataset, var, digits=3){
-  outdat <- tryCatch({
-    shap <- stats::shapiro.test(dataset[,get(var)])
-    outdat <- data.table::data.table(
-      rbind(c("Method:", shap$method),
-            c("W-statistic:", unname(round(shap$statistic, digits))),
-            c("p-value:", round(shap$p.value, digits)))
+shapiro_util <- function(vector, digits = 3, type = "text") {
+  stopifnot(
+    is.numeric(vector),
+    type %in% c("text", "table")
+  )
+  shap <- stats::shapiro.test(vector)
+  w <- unname(round(shap$statistic, digits))
+  p <- round(shap$p.value, digits)
+  if (type == "text") {
+    ret <- paste0(
+      "W: ", w, "\n",
+      "p: ", p, p_marker(p)
     )
-  }, error = function(e){
-    outdat <- data.table::data.table(
-      rbind(c("Method:", ""),
-            c("W-statistic:", "Error"),
-            c("p-value:", "Error"))
+  } else if (type == "table") {
+    ret <- data.table::data.table(
+      cbind(
+        "W_statistic" = w,
+        "p_value" = p,
+        "significance" = p_marker(p)
+      )
     )
-  }, finally = function(f){
-    return(outdat)
-  })
-  colnames(outdat) <- c("", "value")
-  return(outdat)
+  }
+  return(ret)
 }
