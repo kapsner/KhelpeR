@@ -15,10 +15,12 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
   )
 
   if (linebreak) {
-    table <- data.frame(
-      lapply(table, function(x) {gsub("\\n", "<br>", x)}),
-      stringsAsFactors = F
-    )
+    vec <- colnames(table)
+    table <- table[
+      , (vec) := lapply(.SD, function(x) {
+        gsub("\\n", "<br>", x)
+      }), .SDcols = vec
+    ]
   }
 
   ret <- knitr::kable(table, format = "html", escape = FALSE)
@@ -27,7 +29,7 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     if (merge_rows == "binary_results") {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity",
-                     "T-Test", "Wilcoxon-Test"))
+                     "T.Test", "Wilcoxon.Test"))
     } else {
       j <- which(colnames(table) %in% merge_rows)
     }
