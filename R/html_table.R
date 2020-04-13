@@ -29,7 +29,7 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     if (merge_rows == "binary_results") {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity",
-                     "T.Test", "Wilcoxon.Test"))
+                     "T-Test", "Wilcoxon-Test"))
     } else {
       j <- which(colnames(table) %in% merge_rows)
     }
