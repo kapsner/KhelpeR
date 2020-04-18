@@ -2,9 +2,11 @@
 
 export("%notin%")
 export(binary_results)
+export(binary_significant_vars)
 export(continuous_stats)
 export(continuous_stats_grouped)
 export(continuous_stats_overview)
+export(continuous_stats_table1)
 export(discrete_stats)
 export(discrete_stats_overview)
 export(evalBinaryMetrics)

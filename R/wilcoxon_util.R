@@ -21,18 +21,16 @@ wilcoxon_util <- function(dataset, variable, group_var, digits = 3, type = "text
   d <- round(wilcox$estimate, digits)
   if (type == "text") {
     ret <- paste0(
-      "W: ", w, "\n",
-      "p: ", p, p_marker(p)
+      p, p_marker(p),
+      " (W=", w, ")"
     )
   } else if (type == "table") {
     ret <- data.table::data.table(
-      cbind(
         "W_statistic" = w,
         "95_CI" = ci,
         "difference in location" = d,
         "p_value" = p,
         "significance" = p_marker(p)
-      )
     )
   }
   return(ret)

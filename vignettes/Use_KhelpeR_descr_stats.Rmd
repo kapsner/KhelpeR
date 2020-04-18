@@ -39,7 +39,7 @@ dataset <- data.table::as.data.table(PimaIndiansDiabetes2)
 ### Simple Continuous Statistics 
 
 ```{r}
-KhelpeR::continuous_stats_overview(dataset) %>%
+KhelpeR::continuous_stats_reduced(dataset) %>%
   KhelpeR::html_table()
 ```
 
@@ -48,21 +48,21 @@ KhelpeR::continuous_stats_overview(dataset) %>%
 With the default parameter 'method = "all"' (=default), you get a table with extensive continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats(dataset) %>%
+KhelpeR::continuous_stats_overview(dataset) %>%
   KhelpeR::html_table()
 ```
 
 Setting the parameter 'method' to "base", results in a table with basic continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats(dataset, method = "base") %>%
+KhelpeR::continuous_stats_overview(dataset, method = "base") %>%
   KhelpeR::html_table()
 ```
 
 Setting the parameter 'method' to "others", results in a table with the more complex other part of the continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats(dataset, method = "others") %>%
+KhelpeR::continuous_stats_overview(dataset, method = "others") %>%
   KhelpeR::html_table()
 ```
 
@@ -71,7 +71,7 @@ KhelpeR::continuous_stats(dataset, method = "others") %>%
 It is also possible to introduce a grouping variable to the function to show the statistics for each variable and group separately.
 
 ```{r}
-KhelpeR::continuous_stats(dataset, group_var = "diabetes") %>%
+KhelpeR::continuous_stats_overview(dataset, group_var = "diabetes") %>%
   KhelpeR::html_table()
 ```
 
@@ -124,11 +124,53 @@ KhelpeR::kable_table(KhelpeR::fastCatStats(dataset, show_levels = TRUE))
 
 # Group comparisons
 
+## Text based results
+
 ```{r}
 KhelpeR::binary_results(
   dataset = dataset,
   group_var = "diabetes"
 ) %>%
   KhelpeR::html_table(merge_rows = "binary_results")
+```
+
+
+## Numeric results
+
+```{r}
+KhelpeR::binary_results(
+  dataset = dataset,
+  group_var = "diabetes",
+  text_results = FALSE
+) %>%
+  KhelpeR::html_table(merge_rows = "binary_results_table")
+```
+
+## Get vector of variable names with significant test results
+
+```{r}
+KhelpeR::binary_significant_vars(
+  dataset = dataset,
+  group_var = "diabetes"
+)
+```
+
+# Table 1
+
+## Continuous variables
+
+```{r}
+KhelpeR::continuous_stats_table1(
+  dataset = dataset
+) %>%
+  KhelpeR::html_table()
+```
+
+```{r}
+KhelpeR::continuous_stats_table1(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table(merge_rows = "continuous_stats_table1")
 ```
 

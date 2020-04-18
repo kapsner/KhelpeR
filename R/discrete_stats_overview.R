@@ -6,7 +6,7 @@
 #' @inheritParams continuous_stats
 #'
 #' @export
-discrete_stats_overview <- function(dataset, show_levels = FALSE){
+discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2){
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -20,7 +20,7 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE){
   # init table1
   if (isFALSE(show_levels)) {
     table1 <- initialize_table1_cat()
-  } else if (isTRUE(show_levels)){
+  } else if (isTRUE(show_levels)) {
     table1 <- initialize_table1_cat(grouped = TRUE)
   }
 
@@ -36,8 +36,8 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE){
       Levels = as.numeric(dataset[, nlevels(get(var))]),
       Mode = as.character(dataset[, mode_fn(get(var))])
     )
-    if (isTRUE(show_levels)){
-      new_data[["Category"]] <- ""
+    if (isTRUE(show_levels)) {
+      new_data[["Category"]] <- "all"
       new_data[["% Valid"]] <- ""
     }
 
@@ -48,11 +48,14 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE){
         table1 <- rbind(
           table1,
           data.table::data.table(
-            Name = "",
+            Name = var,
             Category = paste0("Group: ", lv),
             N = dataset[get(var) == lv, .N],
             "NA" = "",
-            "% Valid" = dataset[get(var) == lv, .N] / N * 100,
+            "% Valid" = round(
+              dataset[get(var) == lv, .N] / N * 100,
+              digits
+            ),
             Levels = "",
             Mode = ""
           )

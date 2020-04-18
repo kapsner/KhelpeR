@@ -31,7 +31,7 @@ discrete_stats <- function(dataset, response_var, digits = 4){
 
   for (var in vec) {
     ta <- data.table::data.table(
-      table(dataset[, get(var)], dataset[,get(response_var)],
+      table(dataset[, get(var)], dataset[, get(response_var)],
             dnn = c(var, response_var))
     )
     if (nrow(ta) > 4) {

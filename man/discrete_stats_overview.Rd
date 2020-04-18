@@ -4,13 +4,16 @@
 \alias{discrete_stats_overview}
 \title{Calculate overview statistics of discrete variables}
 \usage{
-discrete_stats_overview(dataset, show_levels = FALSE)
+discrete_stats_overview(dataset, show_levels = FALSE, digits = 2)
 }
 \arguments{
 \item{dataset}{The dataset to analyze. It must be of the class 'data.table'.}
 
 \item{show_levels}{A logical. Display the levels of discrete variables
 (default: FALSE).}
+
+\item{digits}{An integer. The number of decimal digits in the table
+(default: 2).}
 }
 \description{
 Calculate overview statistics of discrete variables

@@ -1,4 +1,4 @@
-#' @title Calculate overview statistics of continuous variables
+#' @title Calculate reduced overview statistics of continuous variables
 #'
 #' @inheritParams continuous_stats
 #'

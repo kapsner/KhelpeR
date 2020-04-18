@@ -18,16 +18,14 @@ levene_util <- function(dataset,
   p <- round(levene$`Pr(>F)`[1], digits)
   if (type == "text") {
     ret <- paste0(
-      "F: ", f, "\n",
-      "p: ", p, p_marker(p)
+      p, p_marker(p),
+      " (F=", f, ")"
     )
   } else if (type == "table") {
     ret <- data.table::data.table(
-      cbind(
-        "F_value" = f,
-        "p_value" = p,
-        "significance" = p_marker(p)
-      )
+      "F_value" = f,
+      "p_value" = p,
+      "significance" = p_marker(p)
     )
   }
   return(ret)

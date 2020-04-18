@@ -5,13 +5,20 @@
 \title{Create group comparisons of continuous variables for a dichotomous
   grouping variable.}
 \usage{
-binary_results(dataset, group_var)
+binary_results(dataset, group_var, digits = 3, text_results = TRUE)
 }
 \arguments{
 \item{dataset}{The dataset to analyze. It must be of the class 'data.table'.}
 
 \item{group_var}{A character. Name of the grouping variable. The grouping
 variable should be of the type 'factor'.}
+
+\item{digits}{An integer. The number of decimal digits in the table
+(default: 2).}
+
+\item{text_results}{A logical. If TRUE (default), results are returned text
+based. Set this argument to FALSE to get each test statistic in an extra
+column.}
 }
 \description{
 This function creates a table that contains the output of

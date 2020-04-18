@@ -1,4 +1,4 @@
-#' @title Create statistics table for continuous variables
+#' @title Create statistics overview table for continuous variables
 #'
 #' @description This function creates a vast amount of statistics
 #'
@@ -31,10 +31,6 @@ continuous_stats <- function(dataset,
   )
 
   # subset numeric variables
-  #% vec <- colnames(dataset)[dataset[,sapply(.SD, is.numeric),
-  #% .SDcols = colnames(dataset)]]
-
-  # subset numeric variables
   vec <- subset_num_cols(dataset)
   stopifnot(length(vec) > 0)
 
@@ -43,14 +39,12 @@ continuous_stats <- function(dataset,
 
   if (is.null(group_var)) {
     outtab <- cbind(Name = character(),
-                   Type = character(),
-                   outtab)
+                    outtab)
     for (variable in vec) {
       outtab <- data.table::rbindlist(
         list(
           outtab,
           cbind(Name = variable,
-                Type = dataset[, class(get(variable))],
                 dataset[, extensive_stats(
                   vector = get(variable),
                   digits = digits
@@ -64,16 +58,14 @@ continuous_stats <- function(dataset,
     # TODO test for factor or character here
     vec <- setdiff(vec, group_var)
     outtab <- cbind(Name = character(),
-                   Group = character(),
-                   Type = character(),
-                   outtab)
+                    Group = character(),
+                    outtab)
     for (variable in vec) {
       outtab <- data.table::rbindlist(
         list(
           outtab,
           cbind(Name = variable,
-                Group = "",
-                Type = dataset[, class(get(variable))],
+                Group = "all",
                 dataset[, extensive_stats(
                   vector = get(variable),
                   digits = digits
@@ -86,9 +78,8 @@ continuous_stats <- function(dataset,
         outtab <- data.table::rbindlist(
           list(
             outtab,
-            cbind(Name = "",
+            cbind(Name = variable,
                   Group = paste0("Group: ", group),
-                  Type = "",
                   dataset[get(group_var) == group,
                           extensive_stats(
                             vector = get(variable),

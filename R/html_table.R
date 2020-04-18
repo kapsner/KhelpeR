@@ -30,6 +30,21 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity",
                      "T-Test", "Wilcoxon-Test"))
+    } else if (merge_rows == "binary_results_table") {
+      j <- which(colnames(table) %in%
+                   c("Name", "Levene_F", "Levene_p", "Levene_sign.",
+                     "T_T", "T_CI", "T_df", "T_m1", "T_m2", "T_sign",
+                     "Wilcoxon_W", "Wilcoxon_CI", "Wilcoxon_difference",
+                     "Wilcoxon_p", "Wilcoxon_sign."))
+    } else if (merge_rows == "discrete_stats_overview") {
+      j <- which(colnames(table) %in%
+                   c("Name", "NA", "Level", "Mode"))
+    } else if (merge_rows == "continuous_stats") {
+      j <- which(colnames(table) %in%
+                   c("Name"))
+    } else if (merge_rows == "continuous_stats_table1") {
+      j <- which(colnames(table) %in%
+                   c("Name", "Homoscedasticity"))
     } else {
       j <- which(colnames(table) %in% merge_rows)
     }

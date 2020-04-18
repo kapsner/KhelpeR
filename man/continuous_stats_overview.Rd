@@ -2,7 +2,7 @@
 % Please edit documentation in R/continuous_stats_overview.R
 \name{continuous_stats_overview}
 \alias{continuous_stats_overview}
-\title{Calculate overview statistics of continuous variables}
+\title{Calculate reduced overview statistics of continuous variables}
 \usage{
 continuous_stats_overview(dataset, digits = 2)
 }
@@ -13,5 +13,5 @@ continuous_stats_overview(dataset, digits = 2)
 (default: 2).}
 }
 \description{
-Calculate overview statistics of continuous variables
+Calculate reduced overview statistics of continuous variables
 }

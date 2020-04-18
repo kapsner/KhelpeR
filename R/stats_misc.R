@@ -15,6 +15,19 @@ distribution <- function(dataset, var, digits = 2) {
   return(ret)
 }
 
+distribution_2 <- function(vector, digits = 2) {
+  vec <- round(vector, 2)
+  ret <- paste0(
+    min(vec, na.rm = T), "/ ",
+    round(mean(vec, na.rm = T), digits), "/ ",
+    median(vec, na.rm = T), "/ ",
+    max(vec, na.rm = T), " (",
+    paste0("±", round(sd(vec, na.rm = T), digits)),
+    ")"
+  )
+  return(ret)
+}
+
 # mode
 mode_fn <- function(vector) {
   # https://stackoverflow.com/questions/2547402/is-there-a-built-in-function-
