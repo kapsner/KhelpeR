@@ -6,7 +6,7 @@
 #' @inheritParams continuous_stats
 #'
 #' @export
-discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2){
+discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -27,11 +27,11 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2){
   # iterate over numeric vars
   for (var in vec) {
     # get N
-    N <- as.numeric(dataset[!is.na(get(var)), .N])
+    n <- as.numeric(dataset[!is.na(get(var)), .N])
 
     new_data <- data.table::data.table(
       Name = var,
-      N = N,
+      N = n,
       "NA" = as.numeric(dataset[is.na(get(var)), .N]),
       Levels = as.numeric(dataset[, nlevels(get(var))]),
       Mode = as.character(dataset[, mode_fn(get(var))])
@@ -53,7 +53,7 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2){
             N = dataset[get(var) == lv, .N],
             "NA" = "",
             "% Valid" = round(
-              dataset[get(var) == lv, .N] / N * 100,
+              dataset[get(var) == lv, .N] / n * 100,
               digits
             ),
             Levels = "",
@@ -66,7 +66,7 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2){
   return(table1)
 }
 
-initialize_table1_cat <- function(grouped = FALSE){
+initialize_table1_cat <- function(grouped = FALSE) {
   if (isFALSE(grouped)) {
     table1 <- data.table::data.table("Name" = character(),
                                      "N" = integer(),

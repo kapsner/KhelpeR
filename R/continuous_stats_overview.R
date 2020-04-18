@@ -3,7 +3,7 @@
 #' @inheritParams continuous_stats
 #'
 #' @export
-continuous_stats_overview <- function(dataset, digits = 2){
+continuous_stats_overview <- function(dataset, digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset)
@@ -27,7 +27,7 @@ continuous_stats_overview <- function(dataset, digits = 2){
     round(dat[, lapply(.SD, e1071::kurtosis, na.rm = T)], digits),
     # Max-Min (Range)
     round(dat[, lapply(.SD, base::max, na.rm = T)] -
-            dat[,lapply(.SD, base::min, na.rm = T)], digits)
+            dat[, lapply(.SD, base::min, na.rm = T)], digits)
   ))
 
   retdt <- data.table::data.table(t(retdt), keep.rownames = T)

@@ -11,8 +11,8 @@ ttest_util <- function(dataset,
   )
 
   ttest <- tryCatch({
-    ret <- t.test(
-      as.formula(
+    ret <- stats::t.test(
+      stats::as.formula(
         eval(parse(text = paste0(
           variable, "~", group_var
         )))

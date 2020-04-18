@@ -8,7 +8,11 @@
 #'
 #' @export
 #'
-continuous_stats_grouped <- function(dataset, variable, group_var, digits = 2){
+continuous_stats_grouped <- function(
+  dataset,
+  variable,
+  group_var,
+  digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset),

@@ -39,7 +39,7 @@ dataset <- data.table::as.data.table(PimaIndiansDiabetes2)
 ### Simple Continuous Statistics 
 
 ```{r}
-KhelpeR::continuous_stats_reduced(dataset) %>%
+KhelpeR::continuous_stats_overview(dataset) %>%
   KhelpeR::html_table()
 ```
 
@@ -48,21 +48,21 @@ KhelpeR::continuous_stats_reduced(dataset) %>%
 With the default parameter 'method = "all"' (=default), you get a table with extensive continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats_overview(dataset) %>%
+KhelpeR::continuous_stats(dataset) %>%
   KhelpeR::html_table()
 ```
 
 Setting the parameter 'method' to "base", results in a table with basic continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats_overview(dataset, method = "base") %>%
+KhelpeR::continuous_stats(dataset, method = "base") %>%
   KhelpeR::html_table()
 ```
 
 Setting the parameter 'method' to "others", results in a table with the more complex other part of the continuous statistics. 
 
 ```{r}
-KhelpeR::continuous_stats_overview(dataset, method = "others") %>%
+KhelpeR::continuous_stats(dataset, method = "others") %>%
   KhelpeR::html_table()
 ```
 
@@ -71,8 +71,8 @@ KhelpeR::continuous_stats_overview(dataset, method = "others") %>%
 It is also possible to introduce a grouping variable to the function to show the statistics for each variable and group separately.
 
 ```{r}
-KhelpeR::continuous_stats_overview(dataset, group_var = "diabetes") %>%
-  KhelpeR::html_table()
+KhelpeR::continuous_stats(dataset, group_var = "diabetes") %>%
+  KhelpeR::html_table(merge_rows = "continuous_stats")
 ```
 
 #### Extensive Continuous Statistics per Category
@@ -93,33 +93,6 @@ KhelpeR::plot_boxplot(dataset, variable = "glucose", title = "Glucose distributi
 ```{r}
 KhelpeR::plot_boxplot(dataset, variable = "glucose", group_var = "diabetes",
                       title = "Glucose distribution by presence of diabetes", ylab = "Glucose", xlab = "Diabetes")
-```
-
-
-## Table 1 
-
-### Descriptive Numerical Data 
-
-Every paper has a 'Table 1' to show descriptive statistics about the data set. The function 'fillTable1Num()' easily creates this table for numerical data. 
-
-```{r}
-KhelpeR::kable_table(KhelpeR::fillTable1Num(dataset))
-```
-
-You can also create 'Table 1' grouped by a grouping variable. This adds the calculation of the homoscedasticity between the respective groups for each variable. It is also possible to specify the number of digits in the output table. 
-
-```{r}
-KhelpeR::kable_table(KhelpeR::fillTable1Num(dataset, group_var = "gear", digits = 3))
-```
-
-## Descriptive Categorical Data 
-
-```{r}
-KhelpeR::kable_table(KhelpeR::fastCatStats(dataset))
-```
-
-```{r}
-KhelpeR::kable_table(KhelpeR::fastCatStats(dataset, show_levels = TRUE))
 ```
 
 # Group comparisons

@@ -60,7 +60,7 @@ continuous_table1 <- function(dataset = NULL,
       table1 <- data.table::data.table(
         Name = variable,
         "N" = dataset[!is.na(get(variable)), .N],
-        "min/mean/med/max (sd)" = distribution_2(
+        "min/mean/med/max (sd)" = distribution(
           vector = dataset[!is.na(get(variable)), get(variable)],
           digits = digits
         ),
@@ -73,7 +73,7 @@ continuous_table1 <- function(dataset = NULL,
       if (!is.null(group_var)) {
       lvls <- dataset[, levels(get(group_var))]
 
-      table1[, `:=` (
+      table1[, `:=` ( # nolint
         Group = "all",
         Homoscedasticity = ""
       )]
@@ -94,7 +94,7 @@ continuous_table1 <- function(dataset = NULL,
             "min/mean/med/max (sd)" = sapply(
               X = lvls,
               FUN = function(x) {
-                distribution_2(
+                distribution(
                   vector = dataset[!is.na(get(variable)),
                   ][
                     get(group_var) == x, get(variable)

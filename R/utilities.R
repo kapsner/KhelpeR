@@ -10,14 +10,14 @@
 "%notin%" <- function(x,y){!("%in%"(x,y))} # nolint
 
 # define getTimestamp function
-get_timestamp <- function(mode){
-  if (mode=="human"){
+get_timestamp <- function(mode) {
+  if (mode == "human") {
     time <- paste(
       substr(Sys.time(), 1, 10),
       substr(Sys.time(), 12, 16)
     )
   }
-  if (mode=="machine"){
+  if (mode == "machine") {
     time <- paste(
       gsub("\\-", "", substr(Sys.time(), 1, 10)),
       gsub("\\:", "", substr(Sys.time(), 12, 17)),
@@ -28,7 +28,7 @@ get_timestamp <- function(mode){
 }
 
 # mark p-values with asterixes
-p_marker <- function(value){
+p_marker <- function(value) {
   ret <- tryCatch({
     suppressWarnings(value <- as.numeric(as.character(value)))
     if (value < 0.001) {
@@ -42,11 +42,14 @@ p_marker <- function(value){
     } else {
       out <- ""
     }
-  }, error = function(e){
+    out
+  }, error = function(e) {
     out <- ""
-  }, warning = function(e){
+    out
+  }, warning = function(e) {
     out <- ""
-  }, finally = function(f){
+    out
+  }, finally = function(f) {
     return(out)
   })
   return(ret)

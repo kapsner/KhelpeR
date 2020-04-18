@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-discrete_stats <- function(dataset, response_var, digits = 4){
+discrete_stats <- function(dataset, response_var, digits = 4) {
 
   stopifnot(
     data.table::is.data.table(dataset),

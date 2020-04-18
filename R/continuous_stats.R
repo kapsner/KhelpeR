@@ -20,7 +20,7 @@
 continuous_stats <- function(dataset,
                              group_var = NULL,
                              method = "all",
-                             digits = 2){
+                             digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -37,61 +37,34 @@ continuous_stats <- function(dataset,
   # init outtab
   outtab <- extensive_stats(NULL)
 
-  if (is.null(group_var)) {
-    outtab <- cbind(Name = character(),
-                    outtab)
-    for (variable in vec) {
-      outtab <- data.table::rbindlist(
-        list(
-          outtab,
-          cbind(Name = variable,
-                dataset[, extensive_stats(
-                  vector = get(variable),
-                  digits = digits
-                )]
-          )
-        ),
-        fill = TRUE
-      )
-    }
-  } else {
-    # TODO test for factor or character here
-    vec <- setdiff(vec, group_var)
-    outtab <- cbind(Name = character(),
-                    Group = character(),
-                    outtab)
-    for (variable in vec) {
-      outtab <- data.table::rbindlist(
-        list(
-          outtab,
-          cbind(Name = variable,
-                Group = "all",
-                dataset[, extensive_stats(
-                  vector = get(variable),
-                  digits = digits
-                )]
-          )
-        ),
-        fill = TRUE
-      )
-      for (group in dataset[, unique(get(group_var))]) {
-        outtab <- data.table::rbindlist(
-          list(
-            outtab,
-            cbind(Name = variable,
-                  Group = paste0("Group: ", group),
-                  dataset[get(group_var) == group,
-                          extensive_stats(
-                            vector = get(variable),
-                            digits = digits
-                          )]
-            )
-          ),
-          fill = TRUE
+  for (variable in vec) {
+    outtab <- data.table::rbindlist(
+      list(
+        outtab,
+        get_extensive_stats(
+          dataset = dataset,
+          variable = variable,
+          group_var = group_var,
+          digits = digits
         )
-      }
-    }
+      ),
+      fill = T
+    )
   }
+
+  colorder <- "Name"
+
+  if (!is.null(group_var)) {
+    colorder <- c(colorder, "Group")
+  }
+
+  colorder <- c(colorder, colnames(extensive_stats(NULL)))
+
+  data.table::setcolorder(
+    x = outtab,
+    neworder = colorder
+  )
+
   if (method == "base") {
     vec <- c("Neg", "Zero", "Pos", "OutLo", "OutHi",
              "MAD_mean", "MAD_med", "Skeweness", "Kurtosis",
@@ -102,7 +75,53 @@ continuous_stats <- function(dataset,
              "Mean", "Q75", "Max", "SD")
     outtab[, (vec) := NULL]
   }
-  return(data.table::data.table(outtab))
+
+  return(outtab)
+}
+
+get_extensive_stats <- function(dataset,
+                                variable,
+                                group_var,
+                                digits) {
+
+  stopifnot(
+    is.character(variable),
+    ifelse(is.null(group_var), TRUE, is.character(group_var) &&
+             is.factor(dataset[, get(group_var)])),
+    data.table::is.data.table(dataset) &&
+      is.numeric(dataset[, get(variable)]),
+    is.numeric(digits)
+  )
+
+
+  outtab <- data.table::data.table(
+    Name = variable,
+    dataset[, extensive_stats(
+      vector = get(variable),
+      digits = digits
+    )]
+  )
+  if (!is.null(group_var)) {
+    outtab[, ("Group") := "all"]
+
+    for (group in dataset[, unique(get(group_var))]) {
+      outtab <- data.table::rbindlist(
+        list(
+          outtab,
+          cbind(Name = variable,
+                Group = paste0("Group: ", group),
+                dataset[get(group_var) == group,
+                        extensive_stats(
+                          vector = get(variable),
+                          digits = digits
+                        )]
+          )
+        ),
+        fill = TRUE
+      )
+    }
+  }
+  return(outtab)
 }
 
 
@@ -231,7 +250,7 @@ extensive_stats <- function(vector,
   } else {
     # return empty table for initialization
     retdt <- data.table::data.table(
-      cbind(N = numeric(),
+      N = numeric(),
             "NA" = numeric(),
             Unique = numeric(),
             Min = numeric(),
@@ -254,7 +273,6 @@ extensive_stats <- function(vector,
             Range = numeric(),
             IQR = numeric(),
             SE = numeric()
-      )
     )
   }
   return(retdt)

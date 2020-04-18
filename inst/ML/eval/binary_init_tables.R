@@ -1,7 +1,7 @@
 # create empty tables for model evaluation
 
 # lightgbm
-eval.lgb.binary <- data.table(cbind(
+eval.lgb.binary <- data.table::data.table( # nolint
   "Number" = integer(),
   "N_features" = integer(),
   "CV_time" = numeric(),
@@ -26,17 +26,17 @@ eval.lgb.binary <- data.table(cbind(
   "Specificity" = numeric(),
   "Accuracy" = numeric(),
   "F1_Score" = numeric(),
-  "TN" = numeric(), # conmat[1]
-  "FN" = numeric(), # conmat[2]
-  "FP" = numeric(), # conmat[3]
-  "TP" = numeric(), # conmat[4]
+  "TN" = numeric(), #% conmat[1]
+  "FN" = numeric(), #% conmat[2]
+  "FP" = numeric(), #% conmat[3]
+  "TP" = numeric(), #% conmat[4]
   "AUC_PUBLIC" = numeric(),
   "filename" = character()
-))
+)
 
 # export table
-write.table(eval.lgb.binary, "./eval_binary_lgb.csv", 
-            row.names = F, 
-            sep = ",", 
-            dec = ".", 
+write.table(eval.lgb.binary, "./eval_binary_lgb.csv",
+            row.names = F,
+            sep = ",",
+            dec = ".",
             fileEncoding = "UTF-8")
