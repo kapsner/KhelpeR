@@ -30,7 +30,7 @@ binary_results <- function(dataset,
   stopifnot(length(vec) > 0)
 
   # init table
-  outtab <- results_table_bin(text_results = text_results)
+  outtab <- data.table::data.table()
 
   for (variable in vec) {
     outtab <- data.table::rbindlist(
@@ -43,26 +43,27 @@ binary_results <- function(dataset,
           digits = digits,
           text_results = text_results
         )
-      )
+      ),
+      fill = T
     )
   }
   return(outtab)
 }
 
-results_table_bin <- function(dataset = NULL,
-                              variable = NULL,
-                              group_var = NULL,
-                              digits = NULL,
+results_table_bin <- function(dataset,
+                              variable,
+                              group_var,
+                              digits,
                               text_results = TRUE) {
 
   stopifnot(
-    ifelse(is.null(variable), TRUE, is.character(variable)),
-    ifelse(is.null(group_var), TRUE, is.character(group_var)),
-    ifelse(is.null(dataset), TRUE, data.table::is.data.table(dataset) &&
-             is.numeric(dataset[, get(variable)]) &&
-             is.factor(dataset[, get(group_var)])),
+    is.character(variable),
+    is.character(group_var),
+    data.table::is.data.table(dataset) &&
+      is.numeric(dataset[, get(variable)]) &&
+      is.factor(dataset[, get(group_var)]),
     is.logical(text_results),
-    ifelse(is.null(digits), TRUE, is.numeric(digits))
+    is.numeric(digits)
   )
 
   if (!is.null(dataset) && !is.null(variable) && !is.null(group_var)) {
@@ -85,9 +86,9 @@ results_table_bin <- function(dataset = NULL,
           FUN = function(x) {
             shapiro_util(
               vector = dataset[!is.na(get(variable)),
-                               ][
-                                 get(group_var) == x, get(variable)
-                                 ],
+              ][
+                get(group_var) == x, get(variable)
+              ],
               digits = digits
             )
           },
@@ -171,8 +172,8 @@ results_table_bin <- function(dataset = NULL,
         "T_T" = ttest$T_statistic,
         "T_CI" = ttest$`95_CI`,
         "T_df" = ttest$df,
-        "T_m1" = ttest$`mean in group neg`,
-        "T_m2" = ttest$`mean in group pos`,
+        "T_m1" = ttest[, get(colnames(ttest)[4])],
+        "T_m2" = ttest[, get(colnames(ttest)[5])],
         "T_p" = ttest$p_value,
         "T_sign." = ttest$significance,
         "Wilcoxon_W" = wilcoxon$W_statistic,
@@ -181,47 +182,15 @@ results_table_bin <- function(dataset = NULL,
         "Wilcoxon_p" = wilcoxon$p_value,
         "Wilcoxon_sign." = wilcoxon$significance
       )
+      names(outlist)[names(outlist) == "T_m1"] <- paste0(
+        "T_", colnames(ttest)[4]
+      )
+      names(outlist)[names(outlist) == "T_m2"] <- paste0(
+        "T_", colnames(ttest)[5]
+      )
     }
   } else {
-    if (isTRUE(text_results)) {
-      outlist <- data.table::data.table(
-        cbind(
-          "Name" = character(),
-          "Group" = character(),
-          "N" = numeric(),
-          "Normality" = character(),
-          "Homoscedasticity" = character(),
-          "T-Test" = character(),
-          "Wilcoxon-Test" = character()
-        )
-      )
-    } else if (isFALSE(text_results)) {
-      outlist <- data.table::data.table(
-        cbind(
-          "Name" = character(),
-          "Group" = character(),
-          "N" = numeric(),
-          "Shapiro_W" = numeric(),
-          "Shapiro_p" = numeric(),
-          "Shapiro_sign." = character(),
-          "Levene_F" = numeric(),
-          "Levene_p" = numeric(),
-          "Levene_sign." = character(),
-          "T_T" = numeric(),
-          "T_CI" = character(),
-          "T_df" = numeric(),
-          "T_m1" = numeric(),
-          "T_m2" = numeric(),
-          "T_p" = numeric(),
-          "T_sign." = character(),
-          "Wilcoxon_W" = numeric(),
-          "Wilcoxon_CI" = character(),
-          "Wilcoxon_difference" = numeric(),
-          "Wilcoxon_p" = numeric(),
-          "Wilcoxon_sign." = character()
-        )
-      )
-    }
+    outlist <- "Error"
   }
   return(outlist)
 }

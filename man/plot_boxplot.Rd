@@ -7,6 +7,7 @@
 plot_boxplot(
   dataset,
   variable,
+  method = NULL,
   group_var = NULL,
   title = NULL,
   xlab = NULL,

@@ -33,7 +33,8 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     } else if (merge_rows == "binary_results_table") {
       j <- which(colnames(table) %in%
                    c("Name", "Levene_F", "Levene_p", "Levene_sign.",
-                     "T_T", "T_CI", "T_df", "T_m1", "T_m2", "T_sign",
+                     "T_T", "T_CI", "T_df", colnames(table)[13:14],
+                     "T_p", "T_sign.",
                      "Wilcoxon_W", "Wilcoxon_CI", "Wilcoxon_difference",
                      "Wilcoxon_p", "Wilcoxon_sign."))
     } else if (merge_rows == "discrete_stats_overview") {

@@ -22,8 +22,7 @@ continuous_stats_grouped <- function(
     is.factor(dataset[, get(group_var)])
   )
 
-  retdt <- extensive_stats(NULL)
-  outdat <- data.table::data.table(" " = colnames(retdt))
+  outdat <- data.table::data.table()
 
   cols <- ""
 
@@ -31,16 +30,23 @@ continuous_stats_grouped <- function(
     # append cat to colnames
     cols <- c(cols, cat)
 
-    outdat <- cbind(outdat,
-                    data.table::data.table(
-                      t(dataset[get(group_var) == cat,
-                                extensive_stats(
-                                  vector = get(variable),
-                                  digits = digits
-                                )]
-                      )
-                    ))
+    outdat <- cbind(
+      outdat,
+      data.table::as.data.table(
+        x = t(dataset[get(group_var) == cat,
+                      extensive_stats(
+                        vector = get(variable),
+                        digits = digits
+                      )]),
+        keep.rownames = ifelse(
+          length(cols) == 2,
+          TRUE,
+          FALSE
+        )
+      )
+    )
   }
+
   colnames(outdat) <- c(" ", paste("Category:", cols[2:length(cols)]))
 
   return(outdat)

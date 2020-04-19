@@ -91,7 +91,7 @@ KhelpeR::plot_boxplot(dataset, variable = "glucose", title = "Glucose distributi
 ```
 
 ```{r}
-KhelpeR::plot_boxplot(dataset, variable = "glucose", group_var = "diabetes",
+KhelpeR::plot_boxplot(dataset, variable = "glucose", group_var = "diabetes", method = "wilcox.test",
                       title = "Glucose distribution by presence of diabetes", ylab = "Glucose", xlab = "Diabetes")
 ```
 
@@ -105,6 +105,16 @@ KhelpeR::binary_results(
   group_var = "diabetes"
 ) %>%
   KhelpeR::html_table(merge_rows = "binary_results")
+```
+
+Variant 
+
+```{r}
+KhelpeR::binary_results2(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table()
 ```
 
 

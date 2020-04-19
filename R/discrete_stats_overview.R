@@ -41,7 +41,13 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2) {
       new_data[["% Valid"]] <- ""
     }
 
-    table1 <- rbind(table1, new_data)
+    table1 <- data.table::rbindlist(
+      l = list(
+        table1,
+        new_data
+      ),
+      fill = T
+    )
 
     if (isTRUE(show_levels)) {
       for (lv in dataset[, levels(get(var))]) {

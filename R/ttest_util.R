@@ -56,7 +56,10 @@ ttest_util <- function(dataset,
         "p_value" = p,
         "significance" = p_marker(p)
       )
-      colnames(ret)[4:5] <- c(names(m[1]), names(m[2]))
+      colnames(ret)[4:5] <- c(
+        gsub(" ", "_", names(m[1])),
+        gsub(" ", "_", names(m[2]))
+      )
     }
   } else {
 

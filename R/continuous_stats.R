@@ -35,7 +35,7 @@ continuous_stats <- function(dataset,
   stopifnot(length(vec) > 0)
 
   # init outtab
-  outtab <- extensive_stats(NULL)
+  outtab <- data.table::data.table()
 
   for (variable in vec) {
     outtab <- data.table::rbindlist(
@@ -48,7 +48,7 @@ continuous_stats <- function(dataset,
           digits = digits
         )
       ),
-      fill = T
+      fill = TRUE
     )
   }
 
@@ -248,32 +248,7 @@ extensive_stats <- function(vector,
       )
     }
   } else {
-    # return empty table for initialization
-    retdt <- data.table::data.table(
-      N = numeric(),
-            "NA" = numeric(),
-            Unique = numeric(),
-            Min = numeric(),
-            Q25 = numeric(),
-            Q50 = numeric(),
-            Mean = numeric(),
-            Q75 = numeric(),
-            Max = numeric(),
-            SD = numeric(),
-            Neg = numeric(),
-            Zero = numeric(),
-            Pos = numeric(),
-            OutLo = numeric(),
-            OutHi = numeric(),
-            MAD_mean = numeric(),
-            MAD_med = numeric(),
-            Skeweness = numeric(),
-            Kurtosis = numeric(),
-            Variance = numeric(),
-            Range = numeric(),
-            IQR = numeric(),
-            SE = numeric()
-    )
+    retdt <- "Error"
   }
   return(retdt)
 }

@@ -2,6 +2,7 @@
 
 export("%notin%")
 export(binary_results)
+export(binary_results2)
 export(binary_significant_vars)
 export(cap_outliers)
 export(continuous_stats)

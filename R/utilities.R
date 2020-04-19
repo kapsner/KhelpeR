@@ -31,13 +31,13 @@ get_timestamp <- function(mode) {
 p_marker <- function(value) {
   ret <- tryCatch({
     suppressWarnings(value <- as.numeric(as.character(value)))
-    if (value < 0.001) {
+    if (value <= 0.001) {
       out <- paste0(rep("\u002A", 3), collapse = "")
-    } else if (value < 0.01) {
+    } else if (value <= 0.01) {
       out <- paste0(rep("\u002A", 2), collapse = "")
-    } else if (value < 0.05) {
+    } else if (value <= 0.05) {
       out <- "\u002A"
-    } else if (value < 0.1) {
+    } else if (value <= 0.1) {
       out <- "\u00B0"
     } else {
       out <- ""
