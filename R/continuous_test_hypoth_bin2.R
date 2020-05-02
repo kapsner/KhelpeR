@@ -7,11 +7,14 @@
 #' @param stat A character. Either "mean" to report the mean and standard
 #'    deviation, or "median" to report the median and IQR.
 #'
-#' @inheritParams binary_results
+#' @inheritParams continuous_test_hypoth_bin
 #'
 #' @export
 #'
-binary_results2 <- function(dataset, group_var, stat = "mean", digits = 2) {
+continuous_test_hypoth_bin2 <- function(dataset,
+                                        group_var,
+                                        stat = "mean",
+                                        digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset),
@@ -30,7 +33,7 @@ binary_results2 <- function(dataset, group_var, stat = "mean", digits = 2) {
     group_var = group_var
   )
 
-  bin_res <- binary_results(
+  bin_res <- continuous_test_hypoth_bin(
     dataset = dataset[, c(group_var, vec), with = FALSE],
     group_var = group_var,
     text_results = FALSE
@@ -68,7 +71,11 @@ binary_results2 <- function(dataset, group_var, stat = "mean", digits = 2) {
       )
     }
 
-    which_test <- binary_which_test(dataset, variable, group_var)
+    which_test <- continuous_hypoth_which_test_bin(
+      dataset,
+      variable,
+      group_var
+    )
 
     outstats <- data.table::data.table(
       Name = variable,
@@ -109,9 +116,9 @@ binary_results2 <- function(dataset, group_var, stat = "mean", digits = 2) {
   return(outtab)
 }
 
-binary_which_test <- function(dataset, variable, group_var) {
+continuous_hypoth_which_test_bin <- function(dataset, variable, group_var) {
 
-  bin_res <- binary_results(
+  bin_res <- continuous_test_hypoth_bin(
     dataset = dataset[, c(group_var, variable), with = FALSE],
     group_var = group_var,
     text_results = FALSE

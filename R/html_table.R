@@ -2,8 +2,8 @@
 #'
 #' @param table A table object to render.
 #' @param merge_rows A character vector. The column names, of which cells with
-#'   equal values should be merged. Predefined keys exist: "binary_results" for
-#'   the output of `binary_results`.
+#'   equal values should be merged. Predefined keys exist: "continuous_test_hypoth_bin" for
+#'   the output of `continuous_test_hypoth_bin`.
 #' @param linebreak A logical. Converts linebreaks to "<br>" (default: TRUE).
 #'
 #' @export
@@ -26,11 +26,11 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
   ret <- knitr::kable(table, format = "html", escape = FALSE)
 
   if (!is.null(merge_rows)) {
-    if (merge_rows == "binary_results") {
+    if (merge_rows == "continuous_test_hypoth_bin") {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity",
                      "T-Test", "Wilcoxon-Test"))
-    } else if (merge_rows == "binary_results_table") {
+    } else if (merge_rows == "continuous_test_hypoth_bin_table") {
       j <- which(colnames(table) %in%
                    c("Name", "Levene_F", "Levene_p", "Levene_sign.",
                      "T_T", "T_CI", "T_df", colnames(table)[13:14],
@@ -46,6 +46,9 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     } else if (merge_rows == "continuous_stats_table1") {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity"))
+    } else if (merge_rows == "discrete_test_hypoth_bin2") {
+      j <- which(colnames(table) %in%
+                   c("Name", "p-Value"))
     } else {
       j <- which(colnames(table) %in% merge_rows)
     }
@@ -95,7 +98,7 @@ html_table_flex <- function(table,
     )
   }
   if (!is.null(merge_rows)) {
-    if (merge_rows == "binary_results") {
+    if (merge_rows == "continuous_test_hypoth_bin") {
       j <- c("Name", "Homoscedasticity",
              "T-Test", "Wilcoxon-Test")
     } else {

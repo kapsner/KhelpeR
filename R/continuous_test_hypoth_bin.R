@@ -13,10 +13,10 @@
 #'
 #' @export
 #'
-binary_results <- function(dataset,
-                           group_var,
-                           digits = 3,
-                           text_results = TRUE) {
+continuous_test_hypoth_bin <- function(dataset,
+                                       group_var,
+                                       digits = 3,
+                                       text_results = TRUE) {
   stopifnot(
     data.table::is.data.table(dataset),
     is.character(group_var),

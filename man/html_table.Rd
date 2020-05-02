@@ -10,8 +10,8 @@ html_table(table, merge_rows = NULL, linebreak = TRUE)
 \item{table}{A table object to render.}
 
 \item{merge_rows}{A character vector. The column names, of which cells with
-equal values should be merged. Predefined keys exist: "binary_results" for
-the output of `binary_results`.}
+equal values should be merged. Predefined keys exist: "continuous_test_hypoth_bin" for
+the output of `continuous_test_hypoth_bin`.}
 
 \item{linebreak}{A logical. Converts linebreaks to "<br>" (default: TRUE).}
 }

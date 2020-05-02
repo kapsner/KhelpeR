@@ -10,9 +10,9 @@
 #'
 #' @export
 #'
-binary_significant_vars <- function(dataset,
-                                    group_var,
-                                    significance_level = 0.05) {
+continuous_test_hypoth_sig_vars <- function(dataset,
+                                            group_var,
+                                            significance_level = 0.05) {
   stopifnot(
     data.table::is.data.table(dataset),
     is.character(group_var),
@@ -21,7 +21,7 @@ binary_significant_vars <- function(dataset,
     significance_level > 0 && significance_level <= 0.2
   )
 
-  bin_results <- binary_results(
+  bin_results <- continuous_test_hypoth_bin(
     dataset = dataset,
     group_var = group_var,
     text_results = FALSE
