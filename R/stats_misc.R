@@ -4,7 +4,7 @@ se <- function(vector) {
   return(stats::sd(vector, na.rm = T) / sqrt(length(vector[!is.na(vector)])))
 }
 
-distribution <- function(vector, digits = 2) {
+dispersion <- function(vector, digits = 2) {
   vec <- round(vector, digits)
   ret <- paste0(
     min(vec, na.rm = T), "/ ",

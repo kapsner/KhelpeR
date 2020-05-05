@@ -60,7 +60,7 @@ continuous_table1 <- function(dataset = NULL,
       table1 <- data.table::data.table(
         Name = variable,
         "N" = dataset[!is.na(get(variable)), .N],
-        "min/mean/med/max (sd)" = distribution(
+        "Dispersion min/mean/med/max (sd)" = dispersion(
           vector = dataset[!is.na(get(variable)), get(variable)],
           digits = digits
         ),
@@ -84,38 +84,12 @@ continuous_table1 <- function(dataset = NULL,
           data.table::data.table(
             "Name" = variable,
             "Group" = lvls,
-            "N" = sapply(
-              X = lvls,
-              FUN = function(x) {
-                dataset[!is.na(get(variable)), ][get(group_var) == x, .N]
-              },
-              USE.NAMES = F
+            "N" = get_grouped_N(lvls, dataset, variable, group_var),
+            "Dispersion min/mean/med/max (sd)" = get_grouped_dispersion(
+              lvls, dataset, variable, group_var, digits
             ),
-            "min/mean/med/max (sd)" = sapply(
-              X = lvls,
-              FUN = function(x) {
-                distribution(
-                  vector = dataset[!is.na(get(variable)),
-                  ][
-                    get(group_var) == x, get(variable)
-                  ],
-                  digits = digits
-                )
-              },
-              USE.NAMES = F
-            ),
-            "Normality" = sapply(
-              X = lvls,
-              FUN = function(x) {
-                shapiro_util(
-                  vector = dataset[!is.na(get(variable)),
-                  ][
-                    get(group_var) == x, get(variable)
-                  ],
-                  digits = digits
-                )
-              },
-              USE.NAMES = F
+            "Normality" = get_grouped_normality(
+              lvls, dataset, variable, group_var, digits
             ),
             "Homoscedasticity" = levene_util(
               dataset = dataset,
@@ -139,7 +113,7 @@ continuous_table1 <- function(dataset = NULL,
       table1 <- data.table::data.table(
         "Name" = character(),
         "N" = integer(),
-        "min/mean/med/max (sd)" = character(),
+        "Dispersion min/mean/med/max (sd)" = character(),
         "Normality" = character()
       )
     } else if (isTRUE(grouped)) {
@@ -147,7 +121,7 @@ continuous_table1 <- function(dataset = NULL,
         "Name" = character(),
         "Group" = character(),
         "N" = integer(),
-        "min/mean/med/max (sd)" = character(),
+        "Dispersion min/mean/med/max (sd)" = character(),
         "Normality" = character(),
         "Homoscedasticity" = character()
       )

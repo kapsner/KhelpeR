@@ -2,7 +2,7 @@
 #'   grouping variable.
 #'
 #' @description This function creates a table that contains the output of
-#'   Shapiro Wilk's normality test, Levene's Homoscedasticity test, T-test and
+#'   Shapiro Wilk's normality test, Levene's Homoscedasticity test, T-test or
 #'   Wilcoxon test for continuous variables.
 #'
 #' @param text_results A logical. If TRUE (default), results are returned text
@@ -70,29 +70,38 @@ results_table_bin <- function(dataset,
     lvls <- dataset[, levels(get(group_var))]
     stopifnot(length(lvls) == 2)
 
+    # get test results
+    which_test <- continuous_hypoth_which_test_bin(
+      dataset = dataset,
+      variable = variable,
+      group_var = group_var,
+      equal_variances = FALSE
+    )
+
+    if (which_test == "t.test") {
+      p_value <- ttest_util(
+        dataset = dataset,
+        variable = variable,
+        group_var = group_var
+      )
+    } else if (which_test == "wilcox.test") {
+      p_value <- wilcoxon_util(
+        dataset = dataset,
+        variable = variable,
+        group_var = group_var
+      )
+    }
+
     if (isTRUE(text_results)) {
       outlist <- list(
         "Name" = variable,
         "Group" = lvls,
-        "N" = sapply(
-          X = lvls,
-          FUN = function(x) {
-            dataset[!is.na(get(variable)), ][get(group_var) == x, .N]
-          },
-          USE.NAMES = F
+        "N" = get_grouped_N(lvls, dataset, variable, group_var),
+        "Dispersion min/mean/med/max (sd)" = get_grouped_dispersion(
+          lvls, dataset, variable, group_var, digits
         ),
-        "Normality" = sapply(
-          X = lvls,
-          FUN = function(x) {
-            shapiro_util(
-              vector = dataset[!is.na(get(variable)),
-              ][
-                get(group_var) == x, get(variable)
-              ],
-              digits = digits
-            )
-          },
-          USE.NAMES = F
+        "Normality" = get_grouped_normality(
+          lvls, dataset, variable, group_var, digits
         ),
         "Homoscedasticity" = levene_util(
           dataset = dataset,
@@ -100,18 +109,7 @@ results_table_bin <- function(dataset,
           group_var = group_var,
           digits = digits
         ),
-        "T-Test" = ttest_util(
-          dataset = dataset,
-          variable = variable,
-          group_var = group_var,
-          digits = digits
-        ),
-        "Wilcoxon-Test" = wilcoxon_util(
-          dataset = dataset,
-          variable = variable,
-          group_var = group_var,
-          digits = digits
-        )
+        "p-value" = p_value
       )
     } else if (isFALSE(text_results)) {
 

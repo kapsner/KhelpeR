@@ -72,10 +72,25 @@ continuous_test_hypoth_bin2 <- function(dataset,
     }
 
     which_test <- continuous_hypoth_which_test_bin(
-      dataset,
-      variable,
-      group_var
+      dataset = dataset,
+      variable = variable,
+      group_var = group_var,
+      equal_variances = FALSE
     )
+
+    if (which_test == "t.test") {
+      p_value <- ttest_util(
+        dataset = dataset,
+        variable = variable,
+        group_var = group_var
+      )
+    } else if (which_test == "wilcox.test") {
+      p_value <- wilcoxon_util(
+        dataset = dataset,
+        variable = variable,
+        group_var = group_var
+      )
+    }
 
     outstats <- data.table::data.table(
       Name = variable,
@@ -87,21 +102,7 @@ continuous_test_hypoth_bin2 <- function(dataset,
         stat_1,
         " [n=", n_1, "]"
       ),
-      "p-Value" = ifelse(
-        which_test == "wilcox.test",
-        # return wilcoxon
-        paste0(bin_res[get("Name") == variable,
-                       unique(get("Wilcoxon_p"))],
-               bin_res[get("Name") == variable,
-                       unique(get("Wilcoxon_sign."))],
-               " (Wilcoxon)"),
-        # return ttest
-        paste0(bin_res[get("Name") == variable,
-                       unique(get("T_p"))],
-               bin_res[get("Name") == variable,
-                       unique(get("T_sign."))],
-               " (T-Test)")
-      )
+      "p-Value" = p_value
     )
     colnames(outstats)[2:3] <- paste0("Group: ", lvls)
 
@@ -116,23 +117,61 @@ continuous_test_hypoth_bin2 <- function(dataset,
   return(outtab)
 }
 
-continuous_hypoth_which_test_bin <- function(dataset, variable, group_var) {
+continuous_hypoth_which_test_bin <- function(
+  dataset,
+  variable,
+  group_var,
+  equal_variances = FALSE) {
 
-  bin_res <- continuous_test_hypoth_bin(
-    dataset = dataset[, c(group_var, variable), with = FALSE],
-    group_var = group_var,
-    text_results = FALSE
+  stopifnot(
+    data.table::is.data.table(dataset),
+    is.character(group_var),
+    is.factor(dataset[, get(group_var)]),
+    is.numeric(dataset[, get(variable)])
+  )
+
+  cat(paste0(
+    variable,
+    " vs. ",
+    group_var,
+    "\n"
+  ))
+
+  lvls <- dataset[, levels(get(group_var))]
+  stopifnot(length(lvls) == 2)
+
+  shap_gr0 <- shapiro_util(
+    vector = dataset[get(group_var) == lvls[1], get(variable)]
+  )
+  shap_gr1 <- shapiro_util(
+    vector = dataset[get(group_var) == lvls[2], get(variable)]
+  )
+  homosc <- levene_util(
+    dataset = dataset,
+    variable = variable,
+    group_var = group_var
   )
 
   normality_assumption_violated <- any(
-    bin_res[, grepl("\\*", get("Shapiro_sign."))]
+    grepl("\\*", c(shap_gr0, shap_gr1))
   )
 
+  if (isTRUE(equal_variances)) {
+    homosc_assumption_violated <- any(
+      grepl("\\*", homosc)
+    )
+  } else {
+    homosc_assumption_violated <- FALSE
+  }
+
   if (isTRUE(normality_assumption_violated)) {
+    cat("Normality assumption violated.\n")
+    ret <- "wilcox.test"
+  } else if (isTRUE(homosc_assumption_violated)) {
+    cat("Homoscedasticity assumption violated.\n")
     ret <- "wilcox.test"
   } else if (isFALSE(normality_assumption_violated)) {
     ret <- "t.test"
   }
-
   return(ret)
 }
