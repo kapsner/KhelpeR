@@ -5,13 +5,17 @@
 \title{Create group comparisons of continuous variables for a multi group
   (>2) grouping variable.}
 \usage{
-continuous_test_hypoth_multi(dataset, group_var, digits = 3)
+continuous_test_hypoth_multi(dataset, group_var, type, digits = 3)
 }
 \arguments{
 \item{dataset}{The dataset to analyze. It must be of the class 'data.table'.}
 
 \item{group_var}{A character. Name of the grouping variable. The grouping
 variable should be of the type 'factor'.}
+
+\item{type}{A character. Either "non-par" (performing Kruskal Wallis
+test and Dunn's post-hoc test) or "par" (performing ANOVA and Tukey's
+post-hoc test).}
 
 \item{digits}{An integer. The number of decimal digits in the table
 (default: 2).}

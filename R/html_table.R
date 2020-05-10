@@ -29,7 +29,7 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     if (merge_rows == "continuous_test_hypoth_bin") {
       j <- which(colnames(table) %in%
                    c("Name", "Homoscedasticity",
-                     "T-Test", "Wilcoxon-Test"))
+                     "p-Value"))
     } else if (merge_rows == "continuous_test_hypoth_bin_table") {
       j <- which(colnames(table) %in%
                    c("Name", "Levene_F", "Levene_p", "Levene_sign.",

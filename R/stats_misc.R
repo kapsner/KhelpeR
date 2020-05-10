@@ -21,6 +21,6 @@ dispersion <- function(vector, digits = 2) {
 mode_fn <- function(vector) {
   # https://stackoverflow.com/questions/2547402/is-there-a-built-in-function-
   # for-finding-the-mode
-  ux <- unique(vector)
+  ux <- unique(setdiff(vector, NA))
   return(ux[which.max(tabulate(match(vector, ux)))])
 }

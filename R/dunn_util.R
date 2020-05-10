@@ -15,16 +15,18 @@ dunn_util <- function(dataset,
   )
   sink()
 
+  z <- round(dunn$Z, digits)
+  p <- round(dunn$P, digits)
+  p_adj <- round(dunn$P.adjusted, digits)
   dunn_results <- data.table::data.table(
     comparisons = dunn$comparisons,
-    Z = round(dunn$Z, digits),
-    P = round(dunn$P, digits),
-    "P adj." = round(dunn$P.adjusted, digits)
+    Z = z,
+    P = p,
+    "P adj." = paste0(p_adj, sapply(p_adj, p_marker))
   )
 
-  dunn_results[, text_results := paste0(
+  dunn_results[, ("text_results") := paste0(
     get("P adj."),
-    p_marker(get("P adj.")),
     " (Z=",
     get("Z"),
     ")"

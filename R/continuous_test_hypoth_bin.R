@@ -109,7 +109,7 @@ results_table_bin <- function(dataset,
           group_var = group_var,
           digits = digits
         ),
-        "p-value" = p_value
+        "p-Value" = p_value
       )
     } else if (isFALSE(text_results)) {
 
