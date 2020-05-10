@@ -5,9 +5,6 @@
 #'   Shapiro Wilk's normality test, Levene's Homoscedasticity test, Kruskal
 #'   Wallis test and Dunn's post hoc test.
 #'
-#' @param text_results A logical. If TRUE (default), results are returned text
-#'    based. Set this argument to FALSE to get each test statistic in an extra
-#'    column.
 #' @param type A character. Either "non-par" (performing Kruskal Wallis
 #'    test and Dunn's post-hoc test) or "par" (performing ANOVA and Tukey's
 #'    post-hoc test).

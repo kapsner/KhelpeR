@@ -4,16 +4,13 @@
 #' @description This function creates a table that contains basic statistics
 #'    and p-values of the groups to compare
 #'
-#' @param stat A character. Either "mean" to report the mean and standard
-#'    deviation, or "median" to report the median and IQR.
-#'
 #' @inheritParams continuous_test_hypoth_bin
 #'
 #' @export
 #'
 discrete_test_hypoth_bin2 <- function(dataset,
-                                        group_var,
-                                        digits = 2) {
+                                      group_var,
+                                      digits = 2) {
 
   stopifnot(
     data.table::is.data.table(dataset),

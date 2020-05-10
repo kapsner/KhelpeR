@@ -3,6 +3,8 @@
 #' @param title A character. The plot title (default: NULL).
 #' @param xlab A character. The label of the x axis (default: NULL).
 #' @param ylab A character. The label of the y axis (default: NULL).
+#' @param method A character. The statistical method for group comparisons. One
+#'     of "t.test", "wilcox.test", "anova" or "kruskal.test".
 #'
 #' @inheritParams continuous_stats_grouped
 #'

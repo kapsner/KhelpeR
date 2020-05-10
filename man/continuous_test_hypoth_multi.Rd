@@ -19,10 +19,6 @@ post-hoc test).}
 
 \item{digits}{An integer. The number of decimal digits in the table
 (default: 2).}
-
-\item{text_results}{A logical. If TRUE (default), results are returned text
-based. Set this argument to FALSE to get each test statistic in an extra
-column.}
 }
 \description{
 This function creates a table that contains the output of

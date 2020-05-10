@@ -1,4 +1,4 @@
-get_grouped_N <- function(lvls, dataset, variable, group_var) {
+get_grouped_n <- function(lvls, dataset, variable, group_var) {
   ret <- sapply(
     X = lvls,
     FUN = function(x) {

@@ -10,7 +10,7 @@
 #'
 #' @export
 #'
-continuous_test_hypoth_sig_vars <- function(dataset,
+continuous_test_hypoth_sig_vars <- function(dataset, # nolint
                                             group_var,
                                             significance_level = 0.05) {
   stopifnot(

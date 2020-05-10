@@ -15,9 +15,6 @@ variable should be of the type 'factor'.}
 
 \item{digits}{An integer. The number of decimal digits in the table
 (default: 2).}
-
-\item{stat}{A character. Either "mean" to report the mean and standard
-deviation, or "median" to report the median and IQR.}
 }
 \description{
 This function creates a table that contains basic statistics

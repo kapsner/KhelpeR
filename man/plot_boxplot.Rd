@@ -19,6 +19,9 @@ plot_boxplot(
 
 \item{variable}{A character. Name of the variable to analyze.}
 
+\item{method}{A character. The statistical method for group comparisons. One
+of "t.test", "wilcox.test", "anova" or "kruskal.test".}
+
 \item{group_var}{A character. Name of the grouping variable. The grouping
 variable should be of the type 'factor'.}
 

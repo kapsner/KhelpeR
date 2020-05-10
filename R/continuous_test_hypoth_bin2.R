@@ -117,7 +117,7 @@ continuous_test_hypoth_bin2 <- function(dataset,
   return(outtab)
 }
 
-continuous_hypoth_which_test_bin <- function(
+continuous_hypoth_which_test_bin <- function( # nolint
   dataset,
   variable,
   group_var,

@@ -96,7 +96,7 @@ results_table_bin <- function(dataset,
       outlist <- list(
         "Name" = variable,
         "Group" = lvls,
-        "N" = get_grouped_N(lvls, dataset, variable, group_var),
+        "N" = get_grouped_n(lvls, dataset, variable, group_var),
         "Dispersion min/mean/med/max (sd)" = get_grouped_dispersion(
           lvls, dataset, variable, group_var, digits
         ),
