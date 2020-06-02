@@ -2,7 +2,7 @@
 % Please edit documentation in R/discrete_stats.R
 \name{discrete_stats}
 \alias{discrete_stats}
-\title{extensive_cat_stats}
+\title{discrete_stats}
 \usage{
 discrete_stats(dataset, response_var, digits = 4)
 }
@@ -16,5 +16,5 @@ variable of interest.}
 (default: 2).}
 }
 \description{
-extensive_cat_stats
+discrete_stats
 }

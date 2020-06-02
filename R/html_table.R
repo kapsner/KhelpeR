@@ -41,6 +41,9 @@ html_table <- function(table, merge_rows = NULL, linebreak = TRUE) {
     } else if (merge_rows == "discrete_stats_overview") {
       j <- which(colnames(table) %in%
                    c("Name", "NA", "Level", "Mode"))
+    } else if (merge_rows == "discrete_stats") {
+      j <- which(colnames(table) %in%
+                   c("Name"))
     } else if (merge_rows == "continuous_stats") {
       j <- which(colnames(table) %in%
                    c("Name"))

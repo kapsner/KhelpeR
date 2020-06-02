@@ -29,9 +29,24 @@ dataset <- data.table::as.data.table(BreastCancer)
 ```
 
 ```{r}
-discrete_test_hypoth_bin2(
+KhelpeR::discrete_test_hypoth_bin2(
   dataset = dataset,
   group_var = "Class"
 ) %>% KhelpeR::html_table(merge_rows = "discrete_test_hypoth_bin2")
+```
+
+
+
+```{r}
+KhelpeR::discrete_stats(
+  dataset = dataset,
+  response_var = "Class"
+) %>% KhelpeR::html_table(merge_rows = "discrete_stats")
+```
+
+```{r}
+KhelpeR::discrete_stats_overview(
+  dataset = dataset
+) %>% KhelpeR::html_table(merge_rows = "discrete_stats_overview")
 ```
 

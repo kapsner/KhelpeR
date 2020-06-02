@@ -1,4 +1,4 @@
-#' @title extensive_cat_stats
+#' @title discrete_stats
 #'
 #' @param response_var A character. The column name of the discrete
 #'   variable of interest.
@@ -27,24 +27,51 @@ discrete_stats <- function(dataset, response_var, digits = 4) {
   vec <- vec[dataset[, sapply(.SD, nlevels), .SDcols = vec] >= 2]
   stopifnot(length(vec) > 0)
 
-  outlist <- list()
+  table1 <- data.table::data.table()
 
+  # iterate over numeric vars
   for (var in vec) {
-    ta <- data.table::data.table(
-      table(dataset[, get(var)], dataset[, get(response_var)],
-            dnn = c(var, response_var))
+    # get N
+    n <- as.numeric(dataset[!is.na(get(var)), .N])
+
+    table1 <- data.table::rbindlist(
+      l = list(
+        table1,
+        data.table::data.table(
+          Name = var,
+          Group = "all",
+          N = n,
+          "% Valid" = 100,
+          "NA" = as.numeric(dataset[is.na(get(var)), .N]),
+          Levels = as.numeric(dataset[, nlevels(get(var))])
+        )
+      ),
+      fill = TRUE
     )
-    if (nrow(ta) > 4) {
-      r <- nrow(ta) - 4
-    } else {
-      r <- 0
+
+    for (lv in dataset[, levels(get(response_var))]) {
+      table1 <- data.table::rbindlist(
+        l = list(
+          table1,
+          data.table::data.table(
+            Name = var,
+            Group = lv,
+            N = dataset[get(response_var) == lv, .N],
+            "NA" = "",
+            "% Valid" = round(
+              dataset[get(response_var) == lv, .N] / n * 100,
+              digits
+            ),
+            Levels = dataset[get(response_var) == lv, length(
+              unique(get(var))
+            )]
+          )
+        ),
+        fill = TRUE
+      )
     }
-    ta[, ("statistics") := c(get_contingency_tab_stats(
-      ta, digits, output = "vector"
-    ), rep("", r))]
-    outlist[[vec]] <- ta
   }
-  return(outlist)
+  return(table1)
 }
 
 
