@@ -1,0 +1,37 @@
+---
+title: "KhelpeR: Discrete variables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR_discrete}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+library(data.table)
+library(mlbench)
+library(magrittr)
+```
+
+```{r}
+data("BreastCancer")
+dataset <- data.table::as.data.table(BreastCancer)
+```
+
+```{r}
+discrete_test_hypoth_bin2(
+  dataset = dataset,
+  group_var = "Class"
+) %>% KhelpeR::html_table(merge_rows = "discrete_test_hypoth_bin2")
+```
+

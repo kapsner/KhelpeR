@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2020-05-10 13:06:23 UTC
+Date/Publication: 2020-06-02 10:15:05 UTC
 Imports: 
     data.table,
     e1071,
@@ -28,4 +28,3 @@ Suggests:
     testthat,
     datasets,
     qpdf
-RoxygenNote: 7.1.0

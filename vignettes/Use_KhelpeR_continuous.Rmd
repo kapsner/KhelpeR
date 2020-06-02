@@ -1,0 +1,192 @@
+---
+title: "KhelpeR: Descriptive Statistics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR_descr_stats}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+library(data.table)
+library(mlbench)
+library(magrittr)
+```
+
+# Introduction 
+
+KhelpeR is an R package that aims to provide useful functions for several tasks, e.g. exploratory data analysis or machine learning. 
+
+# Exploratory Data Analysis 
+
+```{r}
+data("PimaIndiansDiabetes2")
+dataset <- data.table::as.data.table(PimaIndiansDiabetes2)
+```
+
+## Continuous Statistics 
+
+### Simple Continuous Statistics 
+
+```{r}
+KhelpeR::continuous_stats_overview(dataset) %>%
+  KhelpeR::html_table()
+```
+
+### Extensive Continuous Statistics 
+
+With the default parameter 'method = "all"' (=default), you get a table with extensive continuous statistics. 
+
+```{r}
+KhelpeR::continuous_stats(dataset) %>%
+  KhelpeR::html_table()
+```
+
+Setting the parameter 'method' to "base", results in a table with basic continuous statistics. 
+
+```{r}
+KhelpeR::continuous_stats(dataset, method = "base") %>%
+  KhelpeR::html_table()
+```
+
+Setting the parameter 'method' to "others", results in a table with the more complex other part of the continuous statistics. 
+
+```{r}
+KhelpeR::continuous_stats(dataset, method = "others") %>%
+  KhelpeR::html_table()
+```
+
+### Grouping 
+
+It is also possible to introduce a grouping variable to the function to show the statistics for each variable and group separately.
+
+```{r}
+KhelpeR::continuous_stats(dataset, group_var = "diabetes") %>%
+  KhelpeR::html_table(merge_rows = "continuous_stats")
+```
+
+#### Extensive Continuous Statistics per Category
+
+```{r}
+KhelpeR::continuous_stats_grouped(dataset, variable = "glucose", group_var = "diabetes") %>%
+  KhelpeR::html_table()
+```
+
+## Plotting
+
+### Boxplots
+
+```{r}
+KhelpeR::plot_boxplot(dataset, variable = "glucose", title = "Glucose distribution", ylab = "Glucose")
+```
+
+```{r}
+KhelpeR::plot_boxplot(dataset, variable = "glucose", group_var = "diabetes", method = "wilcox.test",
+                      title = "Glucose distribution by presence of diabetes", ylab = "Glucose", xlab = "Diabetes")
+```
+
+# Group comparisons
+
+## Binary grouping variable
+
+### Text based results
+
+```{r}
+KhelpeR::continuous_test_hypoth_bin(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table(merge_rows = "continuous_test_hypoth_bin")
+```
+
+Variant 
+
+```{r}
+KhelpeR::continuous_test_hypoth_bin2(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table()
+```
+
+
+### Numeric results
+
+```{r}
+KhelpeR::continuous_test_hypoth_bin(
+  dataset = dataset,
+  group_var = "diabetes",
+  text_results = FALSE
+) %>%
+  KhelpeR::html_table(merge_rows = "continuous_test_hypoth_bin_table")
+```
+
+### Get vector of variable names with significant test results
+
+```{r}
+KhelpeR::continuous_test_hypoth_sig_vars(
+  dataset = dataset,
+  group_var = "diabetes"
+)
+```
+
+
+## Multiclass grouping variable
+
+### Non parametric
+
+```{r}
+data("iris")
+dataset <- data.table::as.data.table(iris)
+
+KhelpeR::continuous_test_hypoth_multi(
+  dataset = dataset,
+  group_var = "Species",
+  type = "non-par"
+) %>%
+  KhelpeR::html_table()
+```
+
+### Parametric
+
+```{r}
+dataset <- data.table::as.data.table(iris)
+
+KhelpeR::continuous_test_hypoth_multi(
+  dataset = dataset,
+  group_var = "Species",
+  type = "par"
+) %>%
+  KhelpeR::html_table()
+```
+
+
+# Table 1
+
+## Continuous variables
+
+```{r}
+KhelpeR::continuous_stats_table1(
+  dataset = dataset
+) %>%
+  KhelpeR::html_table()
+```
+
+```{r}
+KhelpeR::continuous_stats_table1(
+  dataset = dataset,
+  group_var = "diabetes"
+) %>%
+  KhelpeR::html_table(merge_rows = "continuous_stats_table1")
+```
+
