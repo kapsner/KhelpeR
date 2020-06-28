@@ -39,7 +39,7 @@ discrete_stats <- function(dataset, response_var, digits = 4) {
         table1,
         data.table::data.table(
           Name = var,
-          Group = "all",
+          Group = "overall",
           N = n,
           "% Valid" = 100,
           "NA" = as.numeric(dataset[is.na(get(var)), .N]),

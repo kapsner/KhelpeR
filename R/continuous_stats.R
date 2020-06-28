@@ -102,7 +102,7 @@ get_extensive_stats <- function(dataset,
     )]
   )
   if (!is.null(group_var)) {
-    outtab[, ("Group") := "all"]
+    outtab[, ("Group") := "overall"]
 
     for (group in dataset[, unique(get(group_var))]) {
       outtab <- data.table::rbindlist(

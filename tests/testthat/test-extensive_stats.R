@@ -20,5 +20,5 @@ test_that("test continuous_stats", {
   expect_known_hash(nt1, "1ad4175f51")
 
   expect_silent(nt2 <- continuous_stats(dataset, group_var = "gear"))
-  expect_known_hash(nt2, "daa38d5638")
+  expect_known_hash(nt2, "0c40400287") # daa38d5638
 })

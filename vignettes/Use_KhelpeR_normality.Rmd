@@ -1,0 +1,56 @@
+---
+title: "KhelpeR: Test for normality"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use_KhelpeR_normality}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(KhelpeR)
+library(data.table)
+library(mlbench)
+library(magrittr)
+```
+
+
+```{r}
+data("PimaIndiansDiabetes2")
+dataset <- data.table::as.data.table(PimaIndiansDiabetes2)
+```
+
+# Continuous Statistics 
+
+## Simple Continuous Statistics, including normality
+
+```{r}
+KhelpeR::continuous_stats_table1(dataset) %>%
+  KhelpeR::html_table()
+```
+
+## Visual inspection of selected variables 
+
+```{r}
+KhelpeR::plot_normality(
+  dataset = dataset,
+  variable = "pregnant"
+)
+```
+
+```{r}
+KhelpeR::plot_normality(
+  dataset = dataset,
+  variable = "pregnant",
+  group_var = "diabetes"
+)
+```

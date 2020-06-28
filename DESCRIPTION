@@ -1,6 +1,6 @@
 Package: KhelpeR
 Title: Helper Functions and Misc
-Version: 0.0.1.9002
+Version: 0.0.1.9003
 Authors@R: person('Lorenz', 'Kapsner', email =
  'lorenz.kapsner@gmail.com', role = c('cre', 'aut'))
 Description: My Personal Helper Functions.
@@ -9,7 +9,7 @@ LazyData: true
 URL: https://github.com/kapsner/KhelpeR
 BugReports: https://github.com/kapsner/KhelpeR/issues
 Encoding: UTF-8
-Date/Publication: 2020-06-02 10:15:05 UTC
+Date/Publication: 2020-06-28 10:33:11 UTC
 Imports: 
     data.table,
     e1071,

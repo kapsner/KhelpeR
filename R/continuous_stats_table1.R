@@ -57,24 +57,24 @@ continuous_table1 <- function(dataset = NULL,
   )
 
   if (!is.null(dataset) && !is.null(variable)) {
-      table1 <- data.table::data.table(
-        Name = variable,
-        "N" = dataset[!is.na(get(variable)), .N],
-        "Dispersion min/mean/med/max (sd)" = dispersion(
-          vector = dataset[!is.na(get(variable)), get(variable)],
-          digits = digits
-        ),
-        Normality = shapiro_util(
-          vector = dataset[!is.na(get(variable)), get(variable)],
-          digits = digits
-        )
+    table1 <- data.table::data.table(
+      Name = variable,
+      "N" = dataset[!is.na(get(variable)), .N],
+      "Dispersion min/mean/med/max (sd)" = dispersion(
+        vector = dataset[!is.na(get(variable)), get(variable)],
+        digits = digits
+      ),
+      Normality = shapiro_util(
+        vector = dataset[!is.na(get(variable)), get(variable)],
+        digits = digits
       )
+    )
 
-      if (!is.null(group_var)) {
+    if (!is.null(group_var)) {
       lvls <- dataset[, levels(get(group_var))]
 
       table1[, `:=` ( # nolint
-        Group = "all",
+        Group = "overall",
         Homoscedasticity = ""
       )]
 

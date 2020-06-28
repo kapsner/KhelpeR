@@ -37,7 +37,7 @@ discrete_stats_overview <- function(dataset, show_levels = FALSE, digits = 2) {
       Mode = as.character(dataset[, mode_fn(get(var))])
     )
     if (isTRUE(show_levels)) {
-      new_data[["Category"]] <- "all"
+      new_data[["Category"]] <- "overall"
       new_data[["% Valid"]] <- ""
     }
 
