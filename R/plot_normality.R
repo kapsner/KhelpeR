@@ -50,7 +50,7 @@ plot_normality <- function(dataset,
       title = title
     )
   }
-  return(plot(gr))
+  return(gr)
 }
 
 
