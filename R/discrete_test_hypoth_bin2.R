@@ -51,7 +51,8 @@ discrete_test_hypoth_bin2 <- function(dataset,
       "; ",
       xstat$stat.name,
       ": ",
-      round(unname(xstat$statistic), digits)
+      round(unname(xstat$statistic), digits),
+      ")"
     )
 
     outstats <- data.table::data.table(
