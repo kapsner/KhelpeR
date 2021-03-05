@@ -7,11 +7,11 @@ shapiro_util <- function(vector, digits = 3, type = "text") {
     ret <- stats::shapiro.test(vector)
     ret
   }, warning = function(w) {
-    message(w)
+    print(w)
     ret <- NULL
     ret
   }, error = function(e) {
-    message(e)
+    print(e)
     ret <- NULL
     ret
   }, finally = function(f) {
